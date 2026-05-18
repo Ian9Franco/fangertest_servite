@@ -166,8 +166,7 @@ body {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-top: 10px; /* Added to prevent clipping of active item */
-  padding-bottom: 10px; /* Space for scrollbar if visible */
+  padding: 10px 5px; /* Added side padding to prevent border clipping */
   scrollbar-width: none;
 }
 
@@ -176,8 +175,9 @@ body {
 }
 
 .tap-square {
-  min-width: 110px; /* Increased width to prevent text overflow */
-  height: 100px;
+  min-width: 90px;
+  width: 90px;
+  height: 130px; /* Taller than width to make it a vertical rectangle */
   background-color: #fff;
   border: 2px solid var(--border-color);
   border-radius: 12px;
@@ -188,7 +188,7 @@ body {
   padding: 12px 5px; /* Adjusted padding */
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   color: var(--text-primary);
   font-family: var(--font-family-body);
 }
@@ -196,7 +196,16 @@ body {
 .tap-square.active {
   border-color: var(--accent-color);
   background-color: #fff;
-  transform: scale(1.02); /* Subtle scale to avoid breaking layout */
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 191, 0, 0.2);
+}
+
+.tap-square .tap-icon {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tap-square.active .tap-icon {
+  transform: scale(1.15);
 }
 
 .tap-square span {
