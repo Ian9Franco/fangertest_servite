@@ -1,0 +1,398 @@
+:root {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --accent-color: #ffbf00; /* Amber/Beer color */
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --border-color: #333333;
+  --success-color: #4caf50;
+  --danger-color: #f44336;
+  --font-family: 'Montserrat', 'Roboto', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 450px; /* Mobile first / App feel */
+  background-color: #000000;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header */
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000;
+}
+
+.logo img {
+  height: 30px;
+}
+
+.user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  padding: 0 20px;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background-color: var(--accent-color);
+  color: #000;
+}
+
+.tab:not(.active) {
+  background-color: var(--card-bg);
+  color: var(--text-secondary);
+}
+
+/* Search */
+.search-bar {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg);
+  padding: 12px 15px;
+  border-radius: 15px;
+}
+
+.search-input-container input {
+  background: none;
+  border: none;
+  color: #fff;
+  margin-left: 10px;
+  flex: 1;
+  font-size: 16px;
+}
+
+.search-input-container input:focus {
+  outline: none;
+}
+
+/* Location Banner */
+.banner {
+  margin: 0 20px 20px 20px;
+  padding: 15px;
+  background-color: rgba(255, 191, 0, 0.1);
+  border: 1px solid var(--accent-color);
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-text {
+  color: var(--accent-color);
+  font-size: 13px;
+  max-width: 70%;
+}
+
+.banner-btn {
+  background-color: var(--accent-color);
+  color: #000;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  padding: 8px 15px;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  white-space: nowrap;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.filter-chip.active {
+  background-color: var(--text-primary);
+  color: #000;
+}
+
+/* Main Card */
+.main-card {
+  margin: 0 20px 20px 20px;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.bar-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.bar-address {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.balance-section {
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(255,255,255,0.05);
+  border-radius: 15px;
+}
+
+.balance-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.balance-amount {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+}
+
+.btn {
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #000;
+}
+
+.btn-secondary {
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+/* Section Title */
+.section-title {
+  padding: 0 20px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Taps Grid */
+.taps-grid {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+
+.tap-item {
+  width: 50px;
+  height: 50px;
+  background-color: var(--card-bg);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tap-item.active {
+  background-color: var(--accent-color);
+  color: #000;
+}
+
+/* Drink Cards */
+.drinks-carousel {
+  display: flex;
+  gap: 15px;
+  padding: 0 20px 20px 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.drink-card {
+  width: 280px;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 15px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.drink-header {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.drink-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background-color: #fff;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drink-image img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.drink-title-info {
+  flex: 1;
+}
+
+.drink-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.drink-price {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.drink-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.drink-action {
+  background-color: #1a1716;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.drink-action.disabled {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+}

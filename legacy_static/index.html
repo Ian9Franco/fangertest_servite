@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servite Clone</title>
+  <link rel="stylesheet" href="index.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <h1 style="color: var(--accent-color); font-size: 24px; font-weight: bold;">SERVITE</h1>
+      </div>
+      <div class="user-greeting">
+        <span>Hola, <strong>Ian</strong></span>
+        <div class="user-avatar">I</div>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active">Bares</div>
+      <div class="tab">Eventos</div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <div class="search-input-container">
+        <i class="fas fa-search" style="color: var(--text-secondary);"></i>
+        <input type="text" placeholder="Buscá tu bar">
+      </div>
+    </div>
+
+    <!-- Location Banner -->
+    <div class="banner">
+      <div class="banner-text">
+        <i class="fas fa-map-marker-alt"></i> Para ver bares cerca, podés permitir el uso de la ubicación
+      </div>
+      <div class="banner-btn">Permitir</div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-chip active">
+        <i class="fas fa-th-large"></i> Todos
+      </div>
+      <div class="filter-chip">
+        <i class="fas fa-star"></i> Favoritos
+      </div>
+      <div class="filter-chip">
+        <i class="fas fa-wallet"></i> Saldo
+      </div>
+      <div class="filter-chip">
+        <i class="fas fa-percentage"></i> Promociones
+      </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="main-card">
+      <div class="card-header">
+        <div class="bar-info">
+          <span class="bar-name">Servite Central</span>
+          <span class="bar-address">Agrelo 3040, Buenos Aires</span>
+        </div>
+        <div style="color: var(--accent-color); font-size: 20px;">
+          <i class="fas fa-qrcode"></i>
+        </div>
+      </div>
+
+      <div class="balance-section">
+        <div class="balance-title">Saldo disponible</div>
+        <div class="balance-amount">$0.00</div>
+      </div>
+
+      <div class="action-buttons">
+        <div class="btn btn-primary">
+          <i class="fas fa-plus"></i> Cargar saldo
+        </div>
+        <div class="btn btn-secondary">
+          <i class="fas fa-paper-plane"></i>
+        </div>
+        <div class="btn btn-secondary">
+          <i class="fas fa-history"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-title">Canillas disponibles</div>
+
+    <!-- Taps Grid -->
+    <div class="taps-grid">
+      <div class="tap-item">1</div>
+      <div class="tap-item active">2</div>
+      <div class="tap-item">3</div>
+      <div class="tap-item">4</div>
+    </div>
+
+    <!-- Drinks Carousel -->
+    <div class="drinks-carousel">
+      
+      <!-- Drink 1 -->
+      <div class="drink-card">
+        <div class="drink-header">
+          <div class="drink-image">
+            <img src="https://res.cloudinary.com/dordofjba/image/upload/q_auto/f_auto/v1774545242/02_kigq5o.png" alt="Bambú Ipa">
+          </div>
+          <div class="drink-title-info">
+            <div class="drink-name">Bambú Ipa</div>
+            <div class="drink-price">$500 <span style="font-size: 12px; color: var(--text-secondary);">/ 100ml</span></div>
+          </div>
+        </div>
+        <div class="drink-stats">
+          <div class="stat-item"><i class="fas fa-percentage"></i> ALC 5%</div>
+          <div class="stat-item"><i class="fas fa-beer"></i> IBU 35</div>
+          <div class="stat-item"><div class="color-dot" style="background-color: #ff9800;"></div> IPA</div>
+        </div>
+        <div class="drink-action disabled">Fuera de servicio</div>
+      </div>
+
+      <!-- Drink 2 -->
+      <div class="drink-card">
+        <div class="drink-header">
+          <div class="drink-image">
+            <img src="https://res.cloudinary.com/dordofjba/image/upload/v1774545243/04_u3oj4d.png" alt="Scottish BAMBU">
+          </div>
+          <div class="drink-title-info">
+            <div class="drink-name">Scottish BAMBU</div>
+            <div class="drink-price">$400 <span style="font-size: 12px; color: var(--text-secondary);">/ 100ml</span></div>
+          </div>
+        </div>
+        <div class="drink-stats">
+          <div class="stat-item"><i class="fas fa-percentage"></i> ALC 5.5%</div>
+          <div class="stat-item"><i class="fas fa-beer"></i> IBU 9</div>
+          <div class="stat-item"><div class="color-dot" style="background-color: #795548;"></div> SCOTTISH</div>
+        </div>
+        <div class="drink-action">Seleccionar</div>
+      </div>
+
+      <!-- Drink 3 -->
+      <div class="drink-card">
+        <div class="drink-header">
+          <div class="drink-image">
+            <img src="https://res.cloudinary.com/dordofjba/image/upload/v1774545243/01_uogjg3.png" alt="BAMBU Pilsner">
+          </div>
+          <div class="drink-title-info">
+            <div class="drink-name">BAMBU Pilsner</div>
+            <div class="drink-price">$400 <span style="font-size: 12px; color: var(--text-secondary);">/ 100ml</span></div>
+          </div>
+        </div>
+        <div class="drink-stats">
+          <div class="stat-item"><i class="fas fa-percentage"></i> ALC 4.2%</div>
+          <div class="stat-item"><i class="fas fa-beer"></i> IBU 8</div>
+          <div class="stat-item"><div class="color-dot" style="background-color: #ffeb3b;"></div> PILSNER</div>
+        </div>
+        <div class="drink-action">Seleccionar</div>
+      </div>
+
+      <!-- Drink 4 -->
+      <div class="drink-card">
+        <div class="drink-header">
+          <div class="drink-image">
+            <img src="https://res.cloudinary.com/dordofjba/image/upload/v1776994001/pngtree-glass-of-gin-and-tonic-isolated-on-transparent-background-png-image_20379669_yjppml.png" alt="Gin Tónic">
+          </div>
+          <div class="drink-title-info">
+            <div class="drink-name">Gin Tónic</div>
+            <div class="drink-price">$500 <span style="font-size: 12px; color: var(--text-secondary);">/ 100ml</span></div>
+          </div>
+        </div>
+        <div class="drink-stats">
+          <div class="stat-item"><i class="fas fa-percentage"></i> ALC 9%</div>
+          <div class="stat-item"><i class="fas fa-leaf"></i> Hierbas</div>
+          <div class="stat-item"><div class="color-dot" style="background-color: #e0e0e0;"></div> GIN</div>
+        </div>
+        <div class="drink-action">Seleccionar</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

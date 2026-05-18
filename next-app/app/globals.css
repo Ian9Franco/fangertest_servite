@@ -1,0 +1,305 @@
+:root {
+  --bg-color: #ffffff;
+  --app-bg: #F9F4E8; /* Off-white / Cream */
+  --card-bg: #ffffff;
+  --accent-color: #FFBF00; /* Amber / Yellow */
+  --accent-secondary: #FF6600; /* Orange */
+  --text-primary: #1A1716; /* Dark Brown / Black */
+  --text-secondary: #6c757d;
+  --border-color: #e9ecef;
+  --success-color: #28a745;
+  --font-family-body: 'Roboto', sans-serif;
+  --font-family-title: 'Montserrat', sans-serif; /* Fallback for Brunson */
+  --section-gap: 20px; /* Consistent gap between sections */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family-body);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 450px; /* App layout */
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main Content */
+.content {
+  flex: 1;
+  padding: 20px 30px; /* Increased left and right margin */
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap); /* Using the consistent gap variable */
+}
+
+/* Bar Info Card */
+.bar-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-logo {
+  width: 50px;
+  height: 50px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bar-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.bar-name {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: var(--font-family-title);
+  text-transform: uppercase;
+}
+
+.bar-address {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Balance Box */
+.balance-box {
+  background-color: #e9ecef;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.balance-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.balance-amount {
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.2s;
+  font-family: var(--font-family-body);
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+.btn-yellow {
+  background-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+/* Section Title */
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-primary);
+  font-family: var(--font-family-title);
+  text-transform: uppercase;
+}
+
+/* Taps List */
+.taps-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-top: 10px; /* Added to prevent clipping of active item */
+  padding-bottom: 10px; /* Space for scrollbar if visible */
+  scrollbar-width: none;
+}
+
+.taps-list::-webkit-scrollbar {
+  display: none;
+}
+
+.tap-square {
+  min-width: 110px; /* Increased width to prevent text overflow */
+  height: 100px;
+  background-color: #fff;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 5px; /* Adjusted padding */
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  font-family: var(--font-family-body);
+}
+
+.tap-square.active {
+  border-color: var(--accent-color);
+  background-color: #fff;
+  transform: scale(1.02); /* Subtle scale to avoid breaking layout */
+}
+
+.tap-square span {
+  text-align: center;
+}
+
+/* Drink Card */
+.drink-card {
+  background-color: #e9ecef;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+}
+
+.drink-card.selected {
+  border: 2px solid var(--accent-color);
+}
+
+.drink-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drink-left {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.drink-img-container {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.drink-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.drink-tag {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.drink-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.drink-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.drink-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.btn-select {
+  background-color: var(--text-primary);
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  backgroundColor: #fff;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+  z-index: 10;
+  maxWidth: 450px;
+  margin: 0 auto;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animated-card {
+  animation: fadeIn 0.3s ease-out;
+}
