@@ -14,6 +14,7 @@ export interface Drink {
   ibu: string;
   type: string;
   color: string;
+  logo?: string;
 }
 
 export interface Bar {
@@ -35,7 +36,7 @@ export const drinksData: Drink[] = [
     id: 1,
     name: "Bambú Ipa",
     price: "500",
-    img: "/images/bambu_ipa.png",
+    img: "/assets/drinks/bambu_ipa.png",
     tag: "Canilla 1",
     vol: "100ml",
     alc: "5%",
@@ -47,7 +48,7 @@ export const drinksData: Drink[] = [
     id: 2,
     name: "Scottish BAMBU",
     price: "400",
-    img: "/images/scottish_bambu.png",
+    img: "/assets/drinks/scottish_bambu.png",
     tag: "Canilla 2",
     vol: "100ml",
     alc: "5.5%",
@@ -59,7 +60,7 @@ export const drinksData: Drink[] = [
     id: 3,
     name: "BAMBU Pilsner",
     price: "400",
-    img: "/images/bambu_pilsner.png",
+    img: "/assets/drinks/bambu_pilsner.png",
     tag: "Canilla 3",
     vol: "100ml",
     alc: "4.2%",
@@ -71,7 +72,7 @@ export const drinksData: Drink[] = [
     id: 4,
     name: "Gin Tónic",
     price: "500",
-    img: "/images/gin_tonic.png",
+    img: "/assets/drinks/gin_tonic.png",
     tag: "Canilla 4",
     vol: "100ml",
     alc: "9%",

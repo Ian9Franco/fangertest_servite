@@ -135,7 +135,7 @@ export default function WalletTab({
           type: "mercadopago",
           name: "Mercado Pago",
           details: mpEmail.length > 22 ? mpEmail.substring(0, 20) + "..." : mpEmail,
-          logoUrl: "/images/mercado-pago.png"
+          logoUrl: "/assets/payments/mercado_pago.png"
         };
       } else {
         const lastFour = cardNumber.slice(-4) || "4321";
@@ -240,7 +240,7 @@ export default function WalletTab({
             </h1>
           </div>
           <div style={{ backgroundColor: "#fff", borderRadius: "50%", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", width: "32px", height: "32px" }}>
-            <img src="/assets/images/Isotipo_Negro.png" width="20" height="20" alt="Logo" />
+            <img src="/assets/brand/Isotipo_Negro.png" width="20" height="20" alt="Logo" />
           </div>
         </div>
         
@@ -357,7 +357,7 @@ export default function WalletTab({
                       height: "24px",
                       boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
                     }}>
-                      <img src={method.logoUrl || "/images/mercado-pago.png"} style={{ width: "100%", height: "100%", objectFit: "contain" }} alt="MP" />
+                      <img src={method.logoUrl || "/assets/payments/mercado_pago.png"} style={{ width: "100%", height: "100%", objectFit: "contain" }} alt="MP" />
                     </div>
                   ) : (
                     <CreditCard size={18} color={method.isDefault ? "#FFBF00" : "#FF6600"} />
@@ -565,16 +565,17 @@ export default function WalletTab({
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", backgroundColor: "#fff", padding: "20px", borderRadius: "16px", border: "1.5px solid #e9ecef", textAlign: "center" }}>
                         <div style={{
                           backgroundColor: "#fff",
-                          borderRadius: "10px",
-                          padding: "6px 12px",
+                          borderRadius: "12px",
+                          padding: "0",
                           border: "1.5px solid #e9ecef",
-                          width: "90px",
-                          height: "50px",
+                          width: "150px",
+                          height: "65px",
                           display: "flex",
                           justifyContent: "center",
-                          alignItems: "center"
+                          alignItems: "center",
+                          overflow: "hidden"
                         }}>
-                          <img src="/images/mercado-pago.png" style={{ width: "100%", height: "100%", objectFit: "contain" }} alt="MP Logo" />
+                          <img src="/assets/payments/mercado_pago.png" style={{ width: "90%", height: "90%", objectFit: "contain" }} alt="MP Logo" />
                         </div>
                         <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5", maxWidth: "260px" }}>
                           Conectá tu saldo de Mercado Pago para realizar recargas inmediatas con un solo toque sin ingresar datos de tarjeta.

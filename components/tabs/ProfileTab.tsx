@@ -70,7 +70,23 @@ export default function ProfileTab({
             <div style={{ width: "46px", height: "24px", backgroundColor: user.avatar.shoulders, borderTopLeftRadius: "23px", borderTopRightRadius: "23px", position: "absolute", bottom: "0" }}></div>
           </div>
         </div>
-        <h2 style={{ fontSize: "20px", fontWeight: "bold", marginTop: "12px", fontFamily: "var(--font-family-title)" }}>{user.name}</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, fontFamily: "var(--font-family-title)" }}>{user.name}</h2>
+          {user.name === "Sofia" && (
+            <span style={{ 
+              fontSize: "8px", 
+              backgroundColor: "#FF6600", 
+              color: "#fff", 
+              padding: "2px 6px", 
+              borderRadius: "10px", 
+              fontWeight: "900", 
+              textTransform: "uppercase",
+              letterSpacing: "0.5px"
+            }}>
+              Admin
+            </span>
+          )}
+        </div>
         <span style={{ fontSize: "11px", color: "var(--text-secondary)", marginTop: "2px", fontWeight: "bold" }}>{user.rank}</span>
       </div>
 
@@ -97,13 +113,7 @@ export default function ProfileTab({
       {/* Achievements Stagger Stickers Section */}
       <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "12px" }}>
         <span className="section-title">Logros Obtenidos</span>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(4, 1fr)", 
-          gap: "8px", 
-          width: "100%",
-          padding: "4px 0"
-        }}>
+        <div className="achievements-grid">
           {user.achievements.map((badge: any, idx: number) => (
             <motion.div 
               key={idx} 

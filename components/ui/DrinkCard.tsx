@@ -13,6 +13,7 @@ interface Drink {
   ibu: string;
   type: string;
   color: string;
+  logo?: string;
 }
 
 interface DrinkCardProps {
@@ -23,6 +24,7 @@ interface DrinkCardProps {
   onAddFunds: (amount: number) => void;
   multiplier?: number; // Dynamic price multiplier prop
   isMinor?: boolean; // Underage blocker flag
+  theme?: 'light' | 'dark';
 }
 
 const cardVariants = {
@@ -40,7 +42,7 @@ const cardVariants = {
   }),
 };
 
-export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0, isMinor = false }: DrinkCardProps) {
+export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0, isMinor = false, theme = 'light' }: DrinkCardProps) {
   const [quantity, setQuantity] = useState(1);
   const [isShaking, setIsShaking] = useState(false);
 
@@ -171,110 +173,57 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
         borderRadius: "18px", 
         display: "flex", 
         flexDirection: "column", 
-        gap: "14px",
+        gap: "18px",
         position: "relative",
-        boxShadow: "0 4px 15px rgba(0,0,0,0.01)",
+        boxShadow: "none",
         border: "1.5px solid var(--border-color)",
         transition: "background-color 0.3s ease, border-color 0.3s ease"
       }}
     >
-      <div className="drink-main" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div className="drink-left" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-          <div className="drink-img-container" style={{ position: "relative", width: "60px", height: "60px", backgroundColor: "var(--bg-color)", borderRadius: "50%", padding: "5px", boxShadow: "0 2px 8px rgba(0,0,0,0.04)", transition: "background-color 0.3s ease" }}>
-            <Image 
-              src={drink.img} 
-              alt={drink.name} 
-              fill
-              style={{ objectFit: "contain", borderRadius: "50%" }}
-            />
+      <div className="drink-main" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        
+        {/* Left: Image & Info */}
+        <div style={{ display: "flex", gap: "15px" }}>
+          {/* Glass Image */}
+          <div style={{ position: "relative", width: "45px", height: "85px" }}>
+            <Image src={drink.img} alt={drink.name} fill style={{ objectFit: "contain" }} />
           </div>
-          
-          <div className="drink-info" style={{ display: "flex", flexDirection: "column" }}>
-            <span className="drink-tag" style={{ fontSize: "11px", color: "var(--text-secondary)", fontWeight: "bold" }}>{drink.tag} • {drink.name}</span>
-            <div className="drink-stats" style={{ marginTop: "4px", display: "flex", gap: "10px", fontSize: "11px", color: "var(--text-secondary)" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: "2px" }}><Percent size={11} /> ALC {drink.alc}</span>
-              <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-                {drink.id === 4 ? <Leaf size={11} /> : <Beer size={11} />}
-                {drink.ibu === "Hierbas" ? " " : " IBU "}{drink.ibu}
-              </span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px", marginTop: "4px" }}>
-              <div style={{ width: "8px", height: "8px", backgroundColor: drink.color, borderRadius: "50%" }}></div>
-              <span style={{ fontSize: "11px", color: "var(--text-secondary)", fontWeight: "bold" }}>{drink.type}</span>
-            </div>
+
+          {/* Texts */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px", justifyContent: "center" }}>
+            <span style={{ fontSize: "10px", color: "var(--text-secondary)", fontWeight: "bold" }}>Canilla {drink.id}</span>
+            <span style={{ fontSize: "16px", fontWeight: "900", color: "var(--text-primary)" }}>{drink.name}</span>
+            <span style={{ fontSize: "11px", color: "var(--text-secondary)" }}>500ml</span>
+            <span style={{ fontSize: "16px", fontWeight: "900", color: "var(--text-primary)", marginTop: "12px" }}>${priceNum}</span>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-          <div className="drink-price" style={{ fontSize: "22px", fontWeight: "800", color: "var(--text-primary)", transition: "color 0.3s ease" }}>${priceNum}</div>
-          <span style={{ fontSize: "9px", color: "var(--text-secondary)", fontWeight: "bold", textTransform: "uppercase" }}>Por Pinta</span>
+
+        {/* Right: Logo & Technical Info */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+          {/* Brand Logo */}
+          <div style={{ 
+            width: "32px", height: "32px", borderRadius: "50%", overflow: "hidden", position: "relative", 
+            display: "flex", justifyContent: "center", alignItems: "center", 
+            backgroundColor: (drink.logo || (theme === 'dark' ? "Blanco" : "Negro")).toLowerCase().includes("negro") ? "#fff" : "#1A1716",
+            border: (drink.logo || (theme === 'dark' ? "Blanco" : "Negro")).toLowerCase().includes("negro") ? "1px solid var(--border-color)" : "1px solid #2A2625"
+          }}>
+             <Image src={drink.logo || (theme === 'dark' ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png")} alt="Brand" fill style={{ objectFit: "contain", padding: drink.logo ? "0px" : "4px" }} />
+          </div>
+          
+          {/* Tech Stats List */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", fontSize: "9px", color: "var(--text-secondary)", gap: "4px", fontWeight: "bold" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "3px" }}><Percent size={9} /> ALC {drink.alc}</span>
+            <span style={{ display: "flex", alignItems: "center", gap: "3px" }}><Leaf size={9} /> IBU {drink.ibu === "Hierbas" ? "-" : drink.ibu}</span>
+            <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+              <div style={{ width: "6px", height: "6px", backgroundColor: drink.color, borderRadius: "50%" }}></div>
+              {drink.type}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Dynamic Quantity Selector Block */}
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
-        alignItems: "center", 
-        backgroundColor: "var(--bg-color)", 
-        padding: "10px 14px", 
-        borderRadius: "14px",
-        border: "1.5px solid var(--border-color)",
-        transition: "background-color 0.3s ease, border-color 0.3s ease"
-      }}>
-        <span style={{ fontSize: "12.5px", fontWeight: "bold", color: "var(--text-primary)", transition: "color 0.3s ease" }}>Cantidad a servir:</span>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
-            onClick={handleDecrement}
-            style={{ 
-              width: "28px", 
-              height: "28px", 
-              borderRadius: "50%", 
-              border: "1.5px solid var(--border-color)", 
-              backgroundColor: "var(--app-bg)", 
-              display: "flex", 
-              justifyContent: "center", 
-              alignItems: "center", 
-              cursor: "pointer",
-              transition: "background-color 0.3s ease, border-color 0.3s ease"
-            }}
-          >
-            <Minus size={14} color="var(--text-primary)" style={{ transition: "color 0.3s ease" }} />
-          </motion.button>
-          
-          <span style={{ fontSize: "15px", fontWeight: "800", color: "#FF6600", minWidth: "20px", textAlign: "center" }}>
-            {quantity}
-          </span>
-
-          <motion.button 
-            whileTap={{ scale: 0.9 }}
-            onClick={handleIncrement}
-            style={{ 
-              width: "28px", 
-              height: "28px", 
-              borderRadius: "50%", 
-              border: "1.5px solid var(--border-color)", 
-              backgroundColor: "var(--app-bg)", 
-              display: "flex", 
-              justifyContent: "center", 
-              alignItems: "center", 
-              cursor: "pointer",
-              transition: "background-color 0.3s ease, border-color 0.3s ease"
-            }}
-          >
-            <Plus size={14} color="var(--text-primary)" style={{ transition: "color 0.3s ease" }} />
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Cost and CTA Block */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "4px" }}>
-        {/* Total Cost Calculation */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 4px" }}>
-          <span style={{ fontSize: "12px", color: "var(--text-secondary)", fontWeight: "bold" }}>Total a descontar:</span>
-          <span style={{ fontSize: "16px", fontWeight: "900", color: "var(--text-primary)", transition: "color 0.3s ease" }}>${totalCost}</span>
-        </div>
-
+      {/* Actions Block */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         {/* Insufficient Funds Auto-Reload Callout */}
         <AnimatePresence>
           {isInsufficient && (
@@ -310,7 +259,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
                   fontSize: "11.5px",
                   fontWeight: "bold",
                   cursor: "pointer",
-                  boxShadow: "0 2px 8px rgba(255, 102, 0, 0.15)"
+                  boxShadow: "none"
                 }}
               >
                 Cargar exacto (+${missingAmount}) ⚡
@@ -325,8 +274,8 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
           onClick={handleServeClick}
           style={{ 
             width: "100%",
-            padding: "15px",
-            borderRadius: "12px",
+            padding: "16px",
+            borderRadius: "30px", // Fully rounded pill
             border: "none",
             fontSize: "14px",
             fontWeight: "bold",
@@ -337,14 +286,14 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
             gap: "10px",
             backgroundColor: isInsufficient ? "#dc3545" : "var(--text-primary)",
             color: "var(--bg-color)",
-            boxShadow: isInsufficient ? "0 4px 12px rgba(220, 53, 69, 0.15)" : "0 4px 12px rgba(26,23,22,0.12)",
+            boxShadow: "none",
             transition: "background-color 0.2s, color 0.3s ease"
           }}
         >
           {isInsufficient ? (
             <>🚫 Saldo Insuficiente</>
           ) : (
-            <>🍺 Servir {quantity} Pinta{quantity > 1 ? "s" : ""}</>
+            <>Seleccionar</>
           )}
         </motion.button>
       </div>

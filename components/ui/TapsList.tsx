@@ -11,6 +11,7 @@ interface TapsListProps {
   drinks: Drink[];
   selectedTap: number;
   onSelectTap: (id: number) => void;
+  theme?: 'light' | 'dark';
 }
 
 /**
@@ -18,7 +19,7 @@ interface TapsListProps {
  * Displays a horizontal list of available taps (squares).
  * Highlights the selected tap, auto-scrolls to it, and supports drag-to-scroll.
  */
-export default function TapsList({ drinks, selectedTap, onSelectTap }: TapsListProps) {
+export default function TapsList({ drinks, selectedTap, onSelectTap, theme = 'light' }: TapsListProps) {
   const selectedRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   
@@ -64,7 +65,7 @@ export default function TapsList({ drinks, selectedTap, onSelectTap }: TapsListP
 
   return (
     <>
-      <div className="section-title">Canillas disponibles</div>
+      <div className="section-title">Canillas</div>
       
       <div 
         className="taps-list"
@@ -85,10 +86,17 @@ export default function TapsList({ drinks, selectedTap, onSelectTap }: TapsListP
                 onSelectTap(drink.id);
               }
             }}
+            style={{
+              backgroundColor: selectedTap === drink.id ? "var(--app-bg)" : "var(--bg-color)",
+              border: selectedTap === drink.id ? "2px solid #FFBF00" : "2px solid transparent",
+              boxShadow: "none",
+              opacity: selectedTap === drink.id ? 1 : 0.5,
+              transition: "all 0.2s ease"
+            }}
           >
             {/* Servite Logo Icon - Increased size to 48 */}
             <Image 
-              src="/assets/images/Isotipo_Negro.png" 
+              src={theme === "dark" ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png"} 
               alt="Logo" 
               width={48} 
               height={48}

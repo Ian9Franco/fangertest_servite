@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, Plus, Trash2, Check, Sparkles, Beer } from "lucide-react";
+import { Settings, Plus, Trash2, Check, Sparkles, Beer, Lock } from "lucide-react";
 
 import { Bar, Drink, initialBarsData } from "../../data/mockData";
 
 interface LocationTabProps {
+  currentUser: string | null;
   bars: Bar[];
   setBars: React.Dispatch<React.SetStateAction<Bar[]>>;
   setSelectedBarId: (id: number | null) => void;
@@ -18,6 +19,7 @@ interface LocationTabProps {
  * complete with advanced drawers to manage both breweries and individual taps dynamically.
  */
 export default function LocationTab({
+  currentUser,
   bars,
   setBars,
   setSelectedBarId,
@@ -25,6 +27,7 @@ export default function LocationTab({
   pageVariants
 }: LocationTabProps) {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const isAdmin = currentUser === "sofia";
 
   // Form states for adding a new brewery
   const [newName, setNewName] = useState("");
@@ -33,7 +36,7 @@ export default function LocationTab({
   const [newLat, setNewLat] = useState("-34.5880");
   const [newLng, setNewLng] = useState("-58.4120");
   const [newMultiplier, setNewMultiplier] = useState("1.0");
-  const [newLogo, setNewLogo] = useState("/images/cervecerias/Blest.png");
+  const [newLogo, setNewLogo] = useState("/assets/breweries/blest.png");
   
   // Form states for adding a new tap/canilla
   const [selectedAdminBarId, setSelectedAdminBarId] = useState<number>(bars[0]?.id || 1);
@@ -160,6 +163,7 @@ export default function LocationTab({
   // Add a new brewery
   const handleAddBar = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdmin) return;
     if (!newName.trim() || !newAddress.trim()) return;
 
     const nextId = bars.length > 0 ? Math.max(...bars.map(b => b.id)) + 1 : 1;
@@ -183,7 +187,7 @@ export default function LocationTab({
           id: nextId * 100 + 1,
           name: "Bambú Ipa",
           price: "500",
-          img: "/images/bambu_ipa.png",
+          img: "/assets/drinks/bambu_ipa.png",
           tag: "Canilla 1",
           vol: "100ml",
           alc: "5%",
@@ -218,6 +222,7 @@ export default function LocationTab({
 
   // Delete a brewery
   const handleDeleteBar = (id: number) => {
+    if (!isAdmin) return;
     setBars(prev => prev.filter(b => b.id !== id));
     // If the active bar was deleted, reset selection
     setSelectedBarId(null);
@@ -226,6 +231,7 @@ export default function LocationTab({
   // Add a new Tap/Canilla to the selected bar
   const handleAddTap = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isAdmin) return;
     if (!newTapName.trim()) return;
 
     // Find max id among all taps inside all bars to make a unique ID
@@ -239,7 +245,7 @@ export default function LocationTab({
           id: nextTapId,
           name: newTapName,
           price: newTapPrice,
-          img: newTapType.toLowerCase().includes("ipa") ? "/images/bambu_ipa.png" : newTapType.toLowerCase().includes("pilsner") ? "/images/bambu_pilsner.png" : "/images/scottish_bambu.png",
+          img: newTapType.toLowerCase().includes("ipa") ? "/assets/drinks/bambu_ipa.png" : newTapType.toLowerCase().includes("pilsner") ? "/assets/drinks/bambu_pilsner.png" : "/assets/drinks/scottish_bambu.png",
           tag: `Canilla ${currentTaps.length + 1}`,
           vol: "100ml",
           alc: newTapAlc,
@@ -263,6 +269,7 @@ export default function LocationTab({
 
   // Delete a Tap/Canilla and reindex tags sequentially
   const handleDeleteTap = (barId: number, tapId: number) => {
+    if (!isAdmin) return;
     setBars(prev => prev.map(bar => {
       if (bar.id === barId) {
         const filtered = bar.taps.filter(t => t.id !== tapId);
@@ -387,28 +394,30 @@ export default function LocationTab({
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h2 className="section-title">Mapa de Canillas</h2>
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsAdminOpen(!isAdminOpen)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            fontSize: "11px",
-            fontWeight: "bold",
-            color: isAdminOpen ? "#FF6600" : "var(--text-secondary)",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            padding: "4px 8px",
-            borderRadius: "8px",
-            backgroundColor: isAdminOpen ? "rgba(255,102,0,0.08)" : "transparent",
-            transition: "all 0.2s"
-          }}
-        >
-          <Settings size={14} />
-          {isAdminOpen ? "Cerrar Panel" : "Administrar Bares/Canillas"}
-        </motion.button>
+        {isAdmin && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsAdminOpen(!isAdminOpen)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "11px",
+              fontWeight: "bold",
+              color: isAdminOpen ? "#FF6600" : "var(--text-secondary)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "4px 8px",
+              borderRadius: "8px",
+              backgroundColor: isAdminOpen ? "rgba(255,102,0,0.08)" : "transparent",
+              transition: "all 0.2s"
+            }}
+          >
+            <Settings size={14} />
+            {isAdminOpen ? "Cerrar Panel" : "Administrar Bares/Canillas"}
+          </motion.button>
+        )}
       </div>
       
       {/* Container holding the Leaflet Map Engine */}
@@ -461,14 +470,14 @@ export default function LocationTab({
 
               <form onSubmit={handleAddBar} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {/* Presets Location Badges */}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "4px" }}>
-                  <span style={{ fontSize: "10px", color: "var(--text-secondary)", alignSelf: "center" }}>Presets:</span>
-                  <button type="button" onClick={() => applyPresetLocation('palermo')} style={{ fontSize: "10px", padding: "4px 8px", borderRadius: "10px", border: "1px solid var(--border-color)", backgroundColor: "var(--app-bg)", color: "var(--text-primary)", cursor: "pointer" }}>Palermo</button>
-                  <button type="button" onClick={() => applyPresetLocation('recoleta')} style={{ fontSize: "10px", padding: "4px 8px", borderRadius: "10px", border: "1px solid var(--border-color)", backgroundColor: "var(--app-bg)", color: "var(--text-primary)", cursor: "pointer" }}>Recoleta</button>
-                  <button type="button" onClick={() => applyPresetLocation('belgrano')} style={{ fontSize: "10px", padding: "4px 8px", borderRadius: "10px", border: "1px solid var(--border-color)", backgroundColor: "var(--app-bg)", color: "var(--text-primary)", cursor: "pointer" }}>Belgrano</button>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "4px", alignItems: "center" }}>
+                  <span style={{ fontSize: "11px", fontWeight: "bold", color: "var(--text-secondary)" }}>Presets:</span>
+                  <button type="button" onClick={() => applyPresetLocation('palermo')} className="preset-badge">Palermo</button>
+                  <button type="button" onClick={() => applyPresetLocation('recoleta')} className="preset-badge">Recoleta</button>
+                  <button type="button" onClick={() => applyPresetLocation('belgrano')} className="preset-badge">Belgrano</button>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                   <div>
                     <label style={{ fontSize: "10px", color: "var(--text-secondary)" }}>Nombre del Bar</label>
                     <input 
@@ -505,7 +514,7 @@ export default function LocationTab({
                   />
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1.2fr", gap: "8px" }}>
+                <div className="admin-input-row-3">
                   <div>
                     <label style={{ fontSize: "10px", color: "var(--text-secondary)" }}>Latitud</label>
                     <input 
@@ -546,10 +555,10 @@ export default function LocationTab({
                   <label style={{ fontSize: "10px", color: "var(--text-secondary)", display: "block", marginBottom: "6px" }}>Logo de la Cervecería</label>
                   <div style={{ display: "flex", gap: "10px" }}>
                     {[
-                      { path: "/images/cervecerias/Blest.png", name: "Blest" },
-                      { path: "/images/cervecerias/temple-logo.png", name: "Temple" },
-                      { path: "/images/cervecerias/choperia de palermo.jpg", name: "Palermo" },
-                      { path: "/assets/images/Isotipo_Negro.png", name: "Servite" }
+                      { path: "/assets/breweries/blest.png", name: "Blest" },
+                      { path: "/assets/breweries/temple.png", name: "Temple" },
+                      { path: "/assets/breweries/choperia_palermo.jpg", name: "Palermo" },
+                      { path: "/assets/brand/Isotipo_Negro.png", name: "Servite" }
                     ].map((logoPreset) => (
                       <button
                         key={logoPreset.path}
@@ -560,17 +569,17 @@ export default function LocationTab({
                           height: "38px",
                           borderRadius: "8px",
                           border: newLogo === logoPreset.path ? "2.5px solid #FF6600" : "1.5px solid var(--border-color)",
-                          padding: "2px",
+                          padding: logoPreset.path.toLowerCase().includes(".jpg") ? "0" : "2px",
                           cursor: "pointer",
                           overflow: "hidden",
-                          backgroundColor: "#1A1716",
+                          backgroundColor: logoPreset.path.toLowerCase().includes("negro") ? "#fff" : "#1A1716",
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
                           transition: "all 0.2s"
                         }}
                       >
-                        <img src={logoPreset.path} alt={logoPreset.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                        <img src={logoPreset.path} alt={logoPreset.name} style={{ width: "100%", height: "100%", objectFit: logoPreset.path.toLowerCase().includes(".jpg") ? "cover" : "contain" }} />
                       </button>
                     ))}
                   </div>
@@ -638,11 +647,11 @@ export default function LocationTab({
                   <span style={{ fontSize: "11px", fontWeight: "bold", color: "var(--text-primary)" }}>Nueva Canilla para {currentAdminBar.name}:</span>
 
                   {/* Faucet Presets */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                    <span style={{ fontSize: "9px", color: "var(--text-secondary)", alignSelf: "center" }}>Presets Canilla:</span>
-                    <button type="button" onClick={() => applyTapPreset('honey')} style={{ fontSize: "9px", padding: "3px 6px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--card-bg)", color: "var(--text-primary)", cursor: "pointer" }}>🍺 Honey Ale</button>
-                    <button type="button" onClick={() => applyTapPreset('stout')} style={{ fontSize: "9px", padding: "3px 6px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--card-bg)", color: "var(--text-primary)", cursor: "pointer" }}>🍺 Dry Stout</button>
-                    <button type="button" onClick={() => applyTapPreset('ipa')} style={{ fontSize: "9px", padding: "3px 6px", borderRadius: "8px", border: "1px solid var(--border-color)", backgroundColor: "var(--card-bg)", color: "var(--text-primary)", cursor: "pointer" }}>🍺 Red IPA</button>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+                    <span style={{ fontSize: "10px", fontWeight: "bold", color: "var(--text-secondary)" }}>Presets Canilla:</span>
+                    <button type="button" onClick={() => applyTapPreset('honey')} className="preset-badge">🍺 Honey Ale</button>
+                    <button type="button" onClick={() => applyTapPreset('stout')} className="preset-badge">🍺 Dry Stout</button>
+                    <button type="button" onClick={() => applyTapPreset('ipa')} className="preset-badge">🍺 Red IPA</button>
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "8px" }}>
@@ -670,7 +679,7 @@ export default function LocationTab({
                     </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr", gap: "8px" }}>
+                  <div className="admin-input-row-taps">
                     <div>
                       <label style={{ fontSize: "9px", color: "var(--text-secondary)" }}>Estilo/Tipo</label>
                       <input 
@@ -817,8 +826,8 @@ export default function LocationTab({
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <div style={{ width: "24px", height: "24px", borderRadius: "4px", overflow: "hidden", backgroundColor: "#1A1716" }}>
-                        <img src={bar.logo} alt="Bar Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      <div style={{ width: "24px", height: "24px", borderRadius: "4px", overflow: "hidden", backgroundColor: bar.logo.toLowerCase().includes("negro") ? "#fff" : "#1A1716", border: bar.logo.toLowerCase().includes("negro") ? "1px solid var(--border-color)" : "1px solid #2A2625" }}>
+                        <img src={bar.logo} alt="Bar Logo" style={{ width: "100%", height: "100%", objectFit: bar.logo.toLowerCase().includes(".jpg") ? "cover" : "contain", padding: bar.logo.toLowerCase().includes(".jpg") ? "0" : "2px" }} />
                       </div>
                       <span style={{ fontSize: "12px", fontWeight: "bold", color: "var(--text-primary)" }}>{bar.name}</span>
                     </div>
@@ -851,6 +860,7 @@ export default function LocationTab({
               <button
                 type="button"
                 onClick={() => {
+                  if (!isAdmin) return;
                   setBars(initialBarsData);
                   localStorage.setItem("servite_bars", JSON.stringify(initialBarsData));
                   setToastMessage("¡Base de datos restaurada de fábrica! ⚡");
@@ -899,31 +909,33 @@ export default function LocationTab({
                 borderRadius: "16px",
                 cursor: "pointer",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.01)",
-                transition: "all 0.2s"
+                transition: "all 0.2s",
+                gap: "10px"
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0, flex: 1 }}>
                 {/* Logo badge in list */}
                 <div style={{ 
                   width: "36px", 
                   height: "36px", 
                   borderRadius: "10px", 
                   overflow: "hidden", 
-                  backgroundColor: bar.logo.includes("Blest") || bar.logo.includes("temple") ? "#1A1716" : "var(--app-bg)",
-                  border: "1.5px solid var(--border-color)",
+                  backgroundColor: bar.logo.toLowerCase().includes("negro") ? "#fff" : "#1A1716",
+                  border: bar.logo.toLowerCase().includes("negro") ? "1.5px solid var(--border-color)" : "1.5px solid #2A2625",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  flexShrink: 0
                 }}>
-                  <img src={bar.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "contain", padding: bar.logo.includes("Blest") || bar.logo.includes("temple") ? "3px" : "0" }} />
+                  <img src={bar.logo} alt="" style={{ width: "100%", height: "100%", objectFit: bar.logo.toLowerCase().includes(".jpg") ? "cover" : "contain", padding: bar.logo.toLowerCase().includes(".jpg") ? "0" : "3px" }} />
                 </div>
-                <div>
-                  <div style={{ fontWeight: "bold", fontSize: "14px", color: "var(--text-primary)", fontFamily: "var(--font-family-title)" }}>{bar.name}</div>
-                  <div style={{ fontSize: "11px", color: "var(--text-secondary)", marginTop: "2px" }}>{bar.address}</div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontWeight: "bold", fontSize: "14px", color: "var(--text-primary)", fontFamily: "var(--font-family-title)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{bar.name}</div>
+                  <div style={{ fontSize: "11px", color: "var(--text-secondary)", marginTop: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{bar.address}</div>
                 </div>
               </div>
-
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+ 
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", flexShrink: 0 }}>
                 <span style={{ fontSize: "11px", color: "#FF6600", fontWeight: "800" }}>{bar.distance}</span>
                 <button 
                   onClick={(e) => {
@@ -938,7 +950,8 @@ export default function LocationTab({
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    padding: 0
+                    padding: 0,
+                    whiteSpace: "nowrap"
                   }}
                 >
                   Ver canillas ({bar.taps?.length || 0}) →

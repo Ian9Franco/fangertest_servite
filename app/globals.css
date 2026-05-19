@@ -93,7 +93,7 @@ body {
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 1010; /* Keep header above dynamic map panes */
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -348,13 +348,84 @@ body {
   display: flex;
   justify-content: space-around;
   padding: 15px 0;
-  z-index: 10;
+  z-index: 1010; /* Keep navigation bar above Leaflet map container */
   max-width: 450px;
   margin: 0 auto;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Custom isotype inversion filter inside taps list in dark mode */
-[data-theme="dark"] .tap-icon {
-  filter: invert(1) brightness(2);
+
+
+/* Premium Mobile Responsiveness Media Queries */
+@media (max-width: 480px) {
+  .content {
+    padding: 15px 16px; /* Gain horizontal breathing room on mobile */
+  }
+}
+
+/* Achievements grid layout */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 4px 0;
+}
+
+@media (max-width: 480px) {
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+/* Brewery admin form input rows mapping */
+.admin-input-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .admin-input-row-3 {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .admin-input-row-3 > *:last-child {
+    grid-column: span 2;
+  }
+}
+
+/* Faucet taps form input rows mapping */
+.admin-input-row-taps {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .admin-input-row-taps {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .admin-input-row-taps > *:first-child {
+    grid-column: span 2;
+  }
+}
+
+/* Preset badge styling for mobile taps */
+.preset-badge {
+  font-size: 10px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.15s;
+}
+
+.preset-badge:active {
+  transform: scale(0.95);
+  background-color: var(--border-color);
 }

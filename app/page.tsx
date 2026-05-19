@@ -78,27 +78,8 @@ export default function Home() {
   // 1. Initial Mount Hook - Restore data from browser local storage
   useEffect(() => {
     try {
-      const savedBars = localStorage.getItem("servite_bars");
-      if (savedBars) {
-        const parsed = JSON.parse(savedBars);
-        // Robust Migration Check: If any bar is missing coordinates/taps or has 1 or fewer taps, force upgrade
-        const needsUpgrade = parsed.some((b: any) => 
-          !b.taps || 
-          !Array.isArray(b.taps) || 
-          b.taps.length <= 1 || 
-          !b.lat || 
-          !b.lng
-        );
-        if (needsUpgrade) {
-          setBars(initialBarsData);
-          localStorage.setItem("servite_bars", JSON.stringify(initialBarsData)); // Overwrite cache instantly
-        } else {
-          setBars(parsed);
-        }
-      } else {
-        setBars(initialBarsData);
-        localStorage.setItem("servite_bars", JSON.stringify(initialBarsData));
-      }
+      // Force fresh data load for bars during development (Option A)
+      setBars(initialBarsData);
 
       const savedUsers = localStorage.getItem("servite_users");
       if (savedUsers) setUsers(JSON.parse(savedUsers));
@@ -121,10 +102,6 @@ export default function Home() {
   }, []);
 
   // 2. State Change Hooks - Persist updates immediately into local storage
-  useEffect(() => {
-    if (!isStateLoaded) return;
-    localStorage.setItem("servite_bars", JSON.stringify(bars));
-  }, [bars, isStateLoaded]);
 
   useEffect(() => {
     if (!isStateLoaded) return;
@@ -317,8 +294,8 @@ export default function Home() {
   }
 
   return (
-    <div className="app-container" style={{ paddingBottom: "90px" }}>
-      <Header onBack={handleHeaderBack} hideBack={isHideBack} theme={theme} toggleTheme={toggleTheme} />
+    <div className="app-container" style={{ paddingBottom: "20px" }}>
+      <Header onBack={handleHeaderBack} onHome={() => { setSelectedBarId(null); setTab('home'); }} hideBack={isHideBack} theme={theme} toggleTheme={toggleTheme} />
 
       <main className="content">
         <AnimatePresence mode="wait">
@@ -339,14 +316,14 @@ export default function Home() {
                 isFavorite={activeBar.isFavorite}
                 logo={activeBar.logo}
                 onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
+                theme={theme}
               />
-              
-              <BalanceBox balance={activeBar.balance} onAddFunds={handleAddFunds} />
               
               <TapsList 
                 drinks={activeBar.taps || []} 
                 selectedTap={selectedTap} 
                 onSelectTap={handleSelectTap} 
+                theme={theme}
               />
               
               <div style={{ position: "relative", overflow: "hidden", minHeight: "160px" }}>
@@ -360,9 +337,12 @@ export default function Home() {
                     onAddFunds={handleAddFunds} 
                     multiplier={activeBar.tapValueMultiplier}
                     isMinor={currentUserProfile?.isMinor}
+                    theme={theme}
                   />
                 </AnimatePresence>
               </div>
+
+              <BalanceBox balance={activeBar.balance} onAddFunds={handleAddFunds} />
             </motion.div>
           ) : (
             // MAIN TAB PANELS
@@ -381,6 +361,7 @@ export default function Home() {
                   pageVariants={pageVariants}
                   staggerContainer={staggerContainer}
                   listItemVariants={listItemVariants}
+                  setTab={setTab}
                 />
               )}
 
@@ -399,6 +380,7 @@ export default function Home() {
 
               {tab === 'location' && (
                 <LocationTab 
+                  currentUser={currentUser}
                   bars={bars}
                   setBars={setBars}
                   setSelectedBarId={setSelectedBarId}
@@ -421,13 +403,13 @@ export default function Home() {
         </AnimatePresence>
       </main>
 
-      <BottomNav 
+      {/* <BottomNav 
         activeTab={tab} 
         setActiveTab={(newTab) => {
           setSelectedBarId(null);
           setTab(newTab);
         }} 
-      />
+      /> */}
 
       {/* Dynamic Beer Pouring Screen Overlay */}
       <AnimatePresence>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 interface HeaderProps {
   onBack?: () => void;
+  onHome?: () => void;
   hideBack?: boolean;
   theme?: 'light' | 'dark';
   toggleTheme?: () => void;
@@ -13,7 +14,7 @@ interface HeaderProps {
  * Header Component
  * Top bar with animated back arrow, centered branding logo, and premium theme selector.
  */
-export default function Header({ onBack, hideBack = false, theme = 'light', toggleTheme }: HeaderProps) {
+export default function Header({ onBack, onHome, hideBack = false, theme = 'light', toggleTheme }: HeaderProps) {
   return (
     <header className="header" style={{ boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
       {/* Back Button */}
@@ -39,13 +40,17 @@ export default function Header({ onBack, hideBack = false, theme = 'light', togg
       </div>
       
       {/* Centered Logo */}
-      <div className="header-title" style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+      <div 
+        className="header-title" 
+        style={{ flex: 1, display: "flex", justifyContent: "center", padding: "4px 0", cursor: onHome ? "pointer" : "default" }}
+        onClick={onHome}
+      >
         <Image 
-          src="/assets/images/Logotipo_Negro.png" 
+          src={theme === "dark" ? "/assets/brand/Logotipo_Blanco.png" : "/assets/brand/Logotipo_Negro.png"} 
           alt="SERVITE" 
           width={100} 
           height={30}
-          style={{ objectFit: "contain", filter: theme === "dark" ? "invert(1) brightness(2)" : "none", transition: "filter 0.3s ease" }}
+          style={{ objectFit: "contain" }}
           priority
         />
       </div>
