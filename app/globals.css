@@ -56,18 +56,23 @@
 
 * {
   box-sizing: border-box;
+}
+
+html, body {
+  background-color: var(--app-bg);
   margin: 0;
   padding: 0;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  background-color: var(--app-bg);
   color: var(--text-primary);
   font-family: var(--font-family-body);
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  align-items: flex-start; /* FIX: Anchor to the top to prevent pushing header off-screen */
+  min-height: 100dvh; /* FIX: Use dynamic viewport height */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -75,12 +80,13 @@ body {
   width: 100%;
   max-width: 450px; /* App layout */
   background-color: var(--bg-color);
-  min-height: 100vh;
+  min-height: 100dvh; /* FIX: dynamic height */
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
   position: relative;
   transition: background-color 0.3s ease;
+  overflow-x: hidden; /* FIX: Prevent horizontal scroll/cut-offs */
 }
 
 /* Header */
