@@ -1,0 +1,164 @@
+[
+  {
+    "id": 1,
+    "name": "Cervecería Blest",
+    "address": "Pres. Roberto M. Ortiz 1827, Buenos Aires",
+    "lat": -34.5888,
+    "lng": -58.3934,
+    "isFavorite": false,
+    "balance": 1500,
+    "logo": "/images/cervecerias/Blest.png",
+    "distance": "200m",
+    "tapValueMultiplier": 1.0,
+    "taps": [
+      {
+        "id": 101,
+        "name": "Bambú Ipa",
+        "price": "500",
+        "img": "/images/bambu_ipa.png",
+        "tag": "Canilla 1",
+        "vol": "100ml",
+        "alc": "5%",
+        "ibu": "35",
+        "type": "SESSION IPA",
+        "color": "#ff9800"
+      },
+      {
+        "id": 102,
+        "name": "Scottish BAMBU",
+        "price": "400",
+        "img": "/images/scottish_bambu.png",
+        "tag": "Canilla 2",
+        "vol": "100ml",
+        "alc": "5.5%",
+        "ibu": "9",
+        "type": "SCOTTISH EXPORT",
+        "color": "#795548"
+      },
+      {
+        "id": 103,
+        "name": "BAMBU Pilsner",
+        "price": "400",
+        "img": "/images/bambu_pilsner.png",
+        "tag": "Canilla 3",
+        "vol": "100ml",
+        "alc": "4.2%",
+        "ibu": "8",
+        "type": "CZECH PILSNER",
+        "color": "#ffeb3b"
+      },
+      {
+        "id": 104,
+        "name": "Gin Tónic",
+        "price": "550",
+        "img": "/images/gin_tonic.png",
+        "tag": "Canilla 4",
+        "vol": "100ml",
+        "alc": "9%",
+        "ibu": "Hierbas",
+        "type": "GIN",
+        "color": "#e0e0e0"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Temple Bar",
+    "address": "Echeverría 1664, Cdad. Autónoma de Buenos Aires",
+    "lat": -34.5574,
+    "lng": -58.4516,
+    "isFavorite": true,
+    "balance": 0,
+    "logo": "/images/cervecerias/temple-logo.png",
+    "distance": "1.2km",
+    "tapValueMultiplier": 1.1,
+    "taps": [
+      {
+        "id": 201,
+        "name": "Temple Honey",
+        "price": "480",
+        "img": "/images/scottish_bambu.png",
+        "tag": "Canilla 1",
+        "vol": "100ml",
+        "alc": "6.2%",
+        "ibu": "12",
+        "type": "HONEY ALE",
+        "color": "#ffc107"
+      },
+      {
+        "id": 202,
+        "name": "Temple Stout",
+        "price": "520",
+        "img": "/images/scottish_bambu.png",
+        "tag": "Canilla 2",
+        "vol": "100ml",
+        "alc": "5.8%",
+        "ibu": "28",
+        "type": "CREAMY STOUT",
+        "color": "#212529"
+      },
+      {
+        "id": 203,
+        "name": "Wolf Ipa",
+        "price": "550",
+        "img": "/images/bambu_ipa.png",
+        "tag": "Canilla 3",
+        "vol": "100ml",
+        "alc": "6.5%",
+        "ibu": "45",
+        "type": "AMERICAN IPA",
+        "color": "#fd7e14"
+      },
+      {
+        "id": 204,
+        "name": "Temple Pale Ale",
+        "price": "500",
+        "img": "/images/bambu_ipa.png",
+        "tag": "Canilla 4",
+        "vol": "100ml",
+        "alc": "5.2%",
+        "ibu": "32",
+        "type": "AMERICAN PALE ALE",
+        "color": "#e28743"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "La Choppería de Palermo",
+    "address": "El Salvador 4804, Cdad. Autónoma de Buenos Aires",
+    "lat": -34.5902,
+    "lng": -58.4272,
+    "isFavorite": false,
+    "balance": 450,
+    "logo": "/images/cervecerias/choperia de palermo.jpg",
+    "distance": "800m",
+    "tapValueMultiplier": 0.9,
+    "taps": [
+      {
+        "id": 301,
+        "name": "Chop Lager",
+        "price": "350",
+        "img": "/images/bambu_pilsner.png",
+        "tag": "Canilla 1",
+        "vol": "100ml",
+        "alc": "4.5%",
+        "ibu": "14",
+        "type": "LIGHT LAGER",
+        "color": "#ffeb3b"
+      },
+      {
+        "id": 302,
+        "name": "Chop Red",
+        "price": "380",
+        "img": "/images/scottish_bambu.png",
+        "tag": "Canilla 2",
+        "vol": "100ml",
+        "alc": "5.0%",
+        "ibu": "16",
+        "type": "RED ALE",
+        "color": "#dc3545"
+      }
+    ]
+  }
+]

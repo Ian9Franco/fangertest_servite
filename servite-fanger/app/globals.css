@@ -1,3 +1,4 @@
+/* Font Variable Bindings */
 :root {
   --bg-color: #ffffff;
   --app-bg: #F9F4E8; /* Off-white / Cream */
@@ -8,9 +9,49 @@
   --text-secondary: #6c757d;
   --border-color: #e9ecef;
   --success-color: #28a745;
-  --font-family-body: 'Roboto', sans-serif;
-  --font-family-title: 'Montserrat', sans-serif; /* Fallback for Brunson */
+  --font-family-body: var(--font-roboto), 'Roboto', sans-serif;
+  --font-family-title: var(--font-montserrat), 'Montserrat', sans-serif; /* Fallback for Brunson */
   --section-gap: 20px; /* Consistent gap between sections */
+}
+
+/* Premium Sleek Dark Mode theme overrides */
+[data-theme="dark"] {
+  --bg-color: #1A1716; /* Dark charcoal */
+  --app-bg: #110F0E; /* Jet black backdrop */
+  --card-bg: #24201E; /* Elevated card background */
+  --text-primary: #F9F4E8; /* Cream text */
+  --text-secondary: #a0978d; /* Warm muted sand */
+  --border-color: #2D2623; /* Darker border lines */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ping {
+  0% { transform: scale(1); opacity: 0.8; }
+  70%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+.animated-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, var(--border-color) 25%, var(--app-bg) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
 }
 
 * {
@@ -27,6 +68,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app-container {
@@ -38,6 +80,7 @@ body {
   flex-direction: column;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
   position: relative;
+  transition: background-color 0.3s ease;
 }
 
 /* Header */
@@ -46,11 +89,12 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #fff;
+  background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-title {
@@ -73,16 +117,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .bar-logo {
   width: 50px;
   height: 50px;
-  background-color: #f8f9fa;
+  background-color: var(--app-bg);
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
 }
 
 .bar-details {
@@ -104,13 +150,14 @@ body {
 
 /* Balance Box */
 .balance-box {
-  background-color: #e9ecef;
+  background-color: var(--app-bg);
   padding: 20px;
   border-radius: 15px;
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .balance-label {
@@ -149,7 +196,7 @@ body {
 
 .btn-yellow {
   background-color: var(--accent-color);
-  color: var(--text-primary);
+  color: #1A1716;
 }
 
 /* Section Title */
@@ -178,7 +225,7 @@ body {
   min-width: 90px;
   width: 90px;
   height: 130px; /* Taller than width to make it a vertical rectangle */
-  background-color: #fff;
+  background-color: var(--bg-color);
   border: 2px solid var(--border-color);
   border-radius: 12px;
   display: flex;
@@ -195,9 +242,9 @@ body {
 
 .tap-square.active {
   border-color: var(--accent-color);
-  background-color: #fff;
+  background-color: var(--bg-color);
   transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255, 191, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 191, 0, 0.15);
 }
 
 .tap-square .tap-icon {
@@ -214,13 +261,14 @@ body {
 
 /* Drink Card */
 .drink-card {
-  background-color: #e9ecef;
+  background-color: var(--app-bg);
   border-radius: 15px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   gap: 15px;
   position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .drink-card.selected {
@@ -243,9 +291,10 @@ body {
   position: relative;
   width: 60px;
   height: 60px;
-  background-color: #fff;
+  background-color: var(--bg-color);
   border-radius: 50%;
   padding: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .drink-info {
@@ -279,12 +328,13 @@ body {
 
 .btn-select {
   background-color: var(--text-primary);
-  color: #fff;
+  color: var(--bg-color);
   padding: 12px;
   border-radius: 10px;
   text-align: center;
   font-weight: bold;
   cursor: pointer;
+  border: none;
 }
 
 /* Bottom Navigation */
@@ -293,22 +343,18 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  backgroundColor: #fff;
+  background-color: var(--bg-color);
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-around;
   padding: 15px 0;
   z-index: 10;
-  maxWidth: 450px;
+  max-width: 450px;
   margin: 0 auto;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animated-card {
-  animation: fadeIn 0.3s ease-out;
+/* Custom isotype inversion filter inside taps list in dark mode */
+[data-theme="dark"] .tap-icon {
+  filter: invert(1) brightness(2);
 }

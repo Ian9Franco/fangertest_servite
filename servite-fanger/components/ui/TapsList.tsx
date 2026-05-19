@@ -88,7 +88,7 @@ export default function TapsList({ drinks, selectedTap, onSelectTap }: TapsListP
           >
             {/* Servite Logo Icon - Increased size to 48 */}
             <Image 
-              src="/assets/assets/images/Isotipo_Negro.png" 
+              src="/assets/images/Isotipo_Negro.png" 
               alt="Logo" 
               width={48} 
               height={48}
