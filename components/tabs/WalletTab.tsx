@@ -239,8 +239,8 @@ export default function WalletTab({
               <AnimatedCounter value={totalBalance} />
             </h1>
           </div>
-          <div style={{ backgroundColor: "#fff", borderRadius: "50%", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", width: "32px", height: "32px" }}>
-            <img src="/assets/brand/Isotipo_Negro.png" width="20" height="20" alt="Logo" />
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "32px" }}>
+            <img src="/assets/brand/Logotipo_Blanco.png" height="20" alt="Logo" style={{ width: "auto" }} />
           </div>
         </div>
         

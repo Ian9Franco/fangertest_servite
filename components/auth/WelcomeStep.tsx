@@ -21,7 +21,7 @@ export default function WelcomeStep({ onNext }: WelcomeStepProps) {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "80px 28px 140px",
+        padding: "calc(80px + env(safe-area-inset-top)) 28px calc(140px + env(safe-area-inset-bottom))",
         zIndex: 1000,
         textAlign: "center",
         overflow: "hidden"

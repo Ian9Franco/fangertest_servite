@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, MapPin, Heart, Wallet, MoreVertical, Tag } from "lucide-react";
+import { Search, MapPin, Heart, Wallet, MoreVertical, Tag, User, Map as MapIcon } from "lucide-react";
 import Image from "next/image";
 
 interface Bar {
@@ -132,9 +132,9 @@ export default function HomeTab({
                 minWidth: "160px"
               }}
             >
-              <button onClick={() => setTab('profile')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", borderBottom: "1px solid var(--border-color)", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px" }}>👤 Mi Perfil</button>
-              <button onClick={() => setTab('wallet')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", borderBottom: "1px solid var(--border-color)", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px" }}>💳 Mi Billetera</button>
-              <button onClick={() => setTab('location')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px" }}>🗺️ Mapa de Bares</button>
+              <button onClick={() => setTab('profile')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", borderBottom: "1px solid var(--border-color)", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}><User size={14} /> Mi Perfil</button>
+              <button onClick={() => setTab('wallet')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", borderBottom: "1px solid var(--border-color)", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}><Wallet size={14} /> Mi Billetera</button>
+              <button onClick={() => setTab('location')} style={{ padding: "12px 16px", textAlign: "left", background: "none", border: "none", cursor: "pointer", color: "var(--text-primary)", fontWeight: "bold", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px" }}><MapIcon size={14} /> Mapa de Bares</button>
             </motion.div>
           )}
         </AnimatePresence>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Wallet, ChevronDown, ChevronUp } from "lucide-react";
+import { Wallet, ChevronDown, ChevronUp, Send, SquareDashedText } from "lucide-react";
 import AnimatedCounter from "./AnimatedCounter";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -121,7 +121,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
               boxShadow: "none"
             }}
           >
-            <span style={{ fontSize: "14px" }}>✈️</span>
+            <Send size={16} />
             <span>Transferir</span>
           </motion.button>
           
@@ -144,7 +144,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
               boxShadow: "none"
             }}
           >
-            <span style={{ fontSize: "14px" }}>📋</span>
+            <SquareDashedText size={16} />
             <span>Actividad</span>
           </motion.button>
         </div>

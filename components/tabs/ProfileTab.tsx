@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Bell, Palette, MessageSquare, LogOut, ChevronRight, SquareDashedText, Trophy, Beer, Zap, Moon, Crown } from "lucide-react";
 
 interface Bar {
   id: number;
@@ -31,6 +32,17 @@ export default function ProfileTab({
   const user = users[currentUser];
   const totalBalance = bars.reduce((sum, b) => sum + b.balance, 0);
   const totalFavorites = bars.filter(b => b.isFavorite).length;
+
+  const getIcon = (emoji: string) => {
+    switch (emoji) {
+      case "🥇": return <Trophy size={20} color="#FF9500" />;
+      case "🍻": return <Beer size={20} color="#FF6600" />;
+      case "⚡": return <Zap size={20} color="#28a745" />;
+      case "🦉": return <Moon size={20} color="#6f42c1" />;
+      case "👑": return <Crown size={20} color="#FFBF00" />;
+      default: return emoji;
+    }
+  }
 
   return (
     <motion.div
@@ -141,7 +153,7 @@ export default function ProfileTab({
                 fontSize: "18px",
                 marginBottom: "4px"
               }}>
-                {badge.icon}
+                {getIcon(badge.icon)}
               </div>
               <div style={{ fontSize: "10px", fontWeight: "bold", color: "#1A1716", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", width: "100%" }}>{badge.name}</div>
               <div style={{ fontSize: "7.5px", color: "var(--text-secondary)", marginTop: "3px", lineHeight: "1.2" }}>{badge.desc}</div>
@@ -155,9 +167,9 @@ export default function ProfileTab({
         <span className="section-title">Configuración</span>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px", backgroundColor: "#fff", padding: "8px 16px", borderRadius: "20px", border: "1.5px solid #e9ecef" }}>
           {[
-            { icon: "🔔", title: "Notificaciones", desc: "Alertas de saldo y canillas cercanas", action: "Configurado" },
-            { icon: "🎨", title: "Tema Visual", desc: "Claro / Oscuro automático", action: "Claro" },
-            { icon: "💬", title: "Soporte Técnico", desc: "Preguntas y reclamos inmediatos", action: "Chat" },
+            { icon: <Bell size={18} />, title: "Notificaciones", desc: "Alertas de saldo y canillas cercanas", action: "Configurado" },
+            { icon: <Palette size={18} />, title: "Tema Visual", desc: "Claro / Oscuro automático", action: "Claro" },
+            { icon: <SquareDashedText size={18} />, title: "Soporte Técnico", desc: "Preguntas y reclamos inmediatos", action: "Chat" },
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -172,7 +184,7 @@ export default function ProfileTab({
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "18px" }}>{item.icon}</span>
+                <span style={{ color: "var(--text-secondary)", display: "flex" }}>{item.icon}</span>
                 <div>
                   <div style={{ fontWeight: "bold", fontSize: "13px", color: "#1A1716" }}>{item.title}</div>
                   <div style={{ fontSize: "10px", color: "var(--text-secondary)", marginTop: "1px" }}>{item.desc}</div>
@@ -205,10 +217,10 @@ export default function ProfileTab({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "15px" }}>🚪</span>
+            <LogOut size={18} color="#FF6600" />
             <span style={{ fontSize: "13px", fontWeight: "bold", color: "#FF6600" }}>Cerrar Sesión</span>
           </div>
-          <span style={{ color: "#FF6600", fontSize: "12px", fontWeight: "bold" }}>→</span>
+          <ChevronRight size={18} color="#FF6600" />
         </motion.div>
       </div>
     </motion.div>

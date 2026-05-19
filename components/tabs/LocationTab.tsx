@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Settings, Plus, Trash2, Check, Sparkles, Beer, Lock } from "lucide-react";
+import { Settings, Plus, Trash2, Check, Sparkles, Beer, Lock, SquareDashedText } from "lucide-react";
 
 import { Bar, Drink, initialBarsData } from "../../data/mockData";
 
@@ -414,7 +414,7 @@ export default function LocationTab({
               transition: "all 0.2s"
             }}
           >
-            <Settings size={14} />
+            <SquareDashedText size={14} />
             {isAdminOpen ? "Cerrar Panel" : "Administrar Bares/Canillas"}
           </motion.button>
         )}
@@ -649,9 +649,9 @@ export default function LocationTab({
                   {/* Faucet Presets */}
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
                     <span style={{ fontSize: "10px", fontWeight: "bold", color: "var(--text-secondary)" }}>Presets Canilla:</span>
-                    <button type="button" onClick={() => applyTapPreset('honey')} className="preset-badge">🍺 Honey Ale</button>
-                    <button type="button" onClick={() => applyTapPreset('stout')} className="preset-badge">🍺 Dry Stout</button>
-                    <button type="button" onClick={() => applyTapPreset('ipa')} className="preset-badge">🍺 Red IPA</button>
+                    <button type="button" onClick={() => applyTapPreset('honey')} className="preset-badge" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Beer size={10} /> Honey Ale</button>
+                    <button type="button" onClick={() => applyTapPreset('stout')} className="preset-badge" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Beer size={10} /> Dry Stout</button>
+                    <button type="button" onClick={() => applyTapPreset('ipa')} className="preset-badge" style={{ display: "flex", alignItems: "center", gap: "4px" }}><Beer size={10} /> Red IPA</button>
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "8px" }}>
