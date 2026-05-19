@@ -13,7 +13,7 @@ interface Bar {
 }
 
 interface HomeTabProps {
-  currentUser: 'sofia' | 'ian' | null;
+  currentUser: string | null;
   users: any;
   searchQuery: string;
   setSearchQuery: (query: string) => void;

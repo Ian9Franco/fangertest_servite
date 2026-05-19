@@ -116,6 +116,20 @@ export const usersData: any = {
       { icon: "⚡", name: "Super Flow", desc: "Serviste en 5s", color: "rgba(40, 167, 69, 0.08)" },
       { icon: "👑", name: "Rey de Canillas", desc: "Visitaste 5 bares", color: "rgba(111, 66, 193, 0.08)" }
     ]
+  },
+  gustavo: {
+    name: "Gustavo Fanger",
+    rank: "Miembro Junior • Menor de edad",
+    served: "0.0 L",
+    isMinor: true, // Underage drinker check!
+    avatar: {
+      head: "#4CAF50", // Friendly underage Green theme
+      shoulders: "#2E7D32",
+      border: "#81C784"
+    },
+    achievements: [
+      { icon: "🧃", name: "Junior Flow", desc: "Explorando bares locales", color: "rgba(76, 175, 80, 0.1)" }
+    ]
   }
 };
 

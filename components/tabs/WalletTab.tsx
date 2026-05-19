@@ -26,7 +26,7 @@ interface PaymentMethod {
 }
 
 interface WalletTabProps {
-  currentUser: 'sofia' | 'ian' | null;
+  currentUser: string | null;
   users: any;
   bars: Bar[];
   transactions: Transaction[];

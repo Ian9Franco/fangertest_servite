@@ -7,7 +7,7 @@ interface Bar {
 }
 
 interface ProfileTabProps {
-  currentUser: 'sofia' | 'ian' | null;
+  currentUser: string | null;
   users: any;
   bars: Bar[];
   handleLogout: () => void;

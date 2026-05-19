@@ -30,7 +30,7 @@ import {
  * SERVITE FANGER Application Shell
  */
 export default function Home() {
-  const [currentUser, setCurrentUser] = useState<'sofia' | 'ian' | null>(null);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncingType, setSyncingType] = useState<'login' | 'logout'>('login');
 
@@ -154,7 +154,7 @@ export default function Home() {
     }
   }, [selectedBarId, bars, selectedTap]);
 
-  const handleLogin = (user: 'sofia' | 'ian') => {
+  const handleLogin = (user: string) => {
     setSyncingType('login');
     setIsSyncing(true);
     setTimeout(() => {
@@ -162,6 +162,34 @@ export default function Home() {
       setIsSyncing(false);
       setTab('home');
     }, 1200);
+  };
+
+  const handleAddUser = (id: string, name: string, isMinor: boolean, headColor: string) => {
+    const newUser = {
+      name,
+      rank: isMinor ? "Miembro Junior • Menor de edad" : "Miembro Premium • Desde 2026",
+      served: "0.0 L",
+      isMinor,
+      avatar: {
+        head: headColor,
+        shoulders: headColor === "#FF6600" ? "#1A1716" : "#FF6600",
+        border: isMinor ? "#81C784" : "#FFBF00"
+      },
+      achievements: [
+        { 
+          icon: isMinor ? "🧃" : "🥇", 
+          name: isMinor ? "Junior Flow" : "Pionero", 
+          desc: isMinor ? "Explorando bares locales" : "Primer trago servido", 
+          color: isMinor ? "rgba(76, 175, 80, 0.1)" : "rgba(255, 191, 0, 0.12)" 
+        }
+      ]
+    };
+    
+    setUsers((prev: any) => {
+      const updated = { ...prev, [id]: newUser };
+      localStorage.setItem("servite_users", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const handleLogout = () => {
@@ -176,6 +204,7 @@ export default function Home() {
   };
 
   const activeBar = bars.find(b => b.id === selectedBarId) || null;
+  const currentUserProfile = currentUser ? users[currentUser] : null;
 
   const handleSelectTap = (id: number) => {
     if (id !== selectedTap) {
@@ -284,7 +313,7 @@ export default function Home() {
 
   // 2. Auth selector visible if no active user is logged in
   if (!currentUser) {
-    return <LoginView onLogin={handleLogin} theme={theme} toggleTheme={toggleTheme} />;
+    return <LoginView onLogin={handleLogin} theme={theme} toggleTheme={toggleTheme} users={users} onAddUser={handleAddUser} />;
   }
 
   return (
@@ -330,6 +359,7 @@ export default function Home() {
                     onServe={handleServe} 
                     onAddFunds={handleAddFunds} 
                     multiplier={activeBar.tapValueMultiplier}
+                    isMinor={currentUserProfile?.isMinor}
                   />
                 </AnimatePresence>
               </div>

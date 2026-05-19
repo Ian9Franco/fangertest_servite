@@ -22,6 +22,7 @@ interface DrinkCardProps {
   onServe: (totalCost: number, quantity: number, drinkName: string) => void;
   onAddFunds: (amount: number) => void;
   multiplier?: number; // Dynamic price multiplier prop
+  isMinor?: boolean; // Underage blocker flag
 }
 
 const cardVariants = {
@@ -39,7 +40,7 @@ const cardVariants = {
   }),
 };
 
-export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0 }: DrinkCardProps) {
+export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0, isMinor = false }: DrinkCardProps) {
   const [quantity, setQuantity] = useState(1);
   const [isShaking, setIsShaking] = useState(false);
 
@@ -49,6 +50,87 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
   const totalCost = priceNum * quantity;
   const isInsufficient = barBalance < totalCost;
   const missingAmount = totalCost - barBalance;
+
+  if (isMinor) {
+    return (
+      <motion.div 
+        className="drink-card selected"
+        custom={direction}
+        variants={cardVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        style={{ 
+          backgroundColor: "var(--app-bg)", 
+          padding: "18px", 
+          borderRadius: "18px", 
+          display: "flex", 
+          flexDirection: "column", 
+          gap: "14px",
+          position: "relative",
+          boxShadow: "0 4px 15px rgba(0,0,0,0.01)",
+          border: "1.5px solid #dc3545", // Red border warning for minor of age!
+          transition: "background-color 0.3s ease, border-color 0.3s ease"
+        }}
+      >
+        <div className="drink-main" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="drink-left" style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+            <div className="drink-img-container" style={{ position: "relative", width: "60px", height: "60px", backgroundColor: "var(--bg-color)", borderRadius: "50%", padding: "5px", boxShadow: "0 2px 8px rgba(0,0,0,0.04)", display: "flex", justifyContent: "center", alignItems: "center", transition: "background-color 0.3s ease" }}>
+              <span style={{ fontSize: "28px" }}>🧃</span>
+            </div>
+            
+            <div className="drink-info" style={{ display: "flex", flexDirection: "column" }}>
+              <span className="drink-tag" style={{ fontSize: "11px", color: "#dc3545", fontWeight: "bold" }}>COMPRA RESTRINGIDA</span>
+              <span style={{ fontSize: "15px", fontWeight: "bold", color: "var(--text-primary)" }}>{drink.name}</span>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+            <div style={{ fontSize: "16px", fontWeight: "800", color: "#dc3545" }}>MENOR</div>
+          </div>
+        </div>
+
+        <div style={{ 
+          backgroundColor: "rgba(220, 53, 69, 0.05)",
+          border: "1.5px dashed rgba(220, 53, 69, 0.3)",
+          padding: "15px",
+          borderRadius: "14px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+          alignItems: "center"
+        }}>
+          <AlertCircle size={22} color="#dc3545" />
+          <span style={{ fontSize: "13px", fontWeight: "bold", color: "#dc3545" }}>
+            Acceso Denegado a Canilla
+          </span>
+          <span style={{ fontSize: "11.5px", color: "var(--text-secondary)", lineHeight: "1.4" }}>
+            Bajo las leyes vigentes, los menores de edad no están autorizados a servirse ni consumir bebidas alcohólicas de las canillas de Servite. ¡Disfrutá de la música y el ambiente del bar!
+          </span>
+        </div>
+
+        <button 
+          disabled
+          style={{ 
+            width: "100%",
+            padding: "15px",
+            borderRadius: "12px",
+            border: "none",
+            fontSize: "14px",
+            fontWeight: "bold",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#e9ecef",
+            color: "#6c757d",
+            cursor: "not-allowed"
+          }}
+        >
+          🚫 Venta prohibida a menores
+        </button>
+      </motion.div>
+    );
+  }
 
   const handleIncrement = () => {
     if (quantity < 10) setQuantity(q => q + 1);
