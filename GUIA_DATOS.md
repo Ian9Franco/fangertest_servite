@@ -1,6 +1,6 @@
 # Guía de Administración de Datos - Servite
 
-Bienvenido al manual operativo de Servite. Esta guía te explica cómo estructurar, agregar y vincular información clave de bares, canillas (taps) y recursos gráficos para que funcionen perfectamente en los mapas interactivos y el motor de la interfaz de usuario.
+Manual operativo de Servite. Esta guía te explica cómo estructurar, agregar y vincular información clave de bares, canillas (taps) y recursos gráficos para que funcionen perfectamente en los mapas interactivos y el motor de la interfaz de usuario.
 
 ---
 
