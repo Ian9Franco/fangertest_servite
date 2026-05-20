@@ -81,6 +81,16 @@ export default function SimpleWalletTab({
 
       {/* Amount Input Capsule */}
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <style>{`
+          input[type=number]::-webkit-inner-spin-button, 
+          input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+          }
+          input[type=number] {
+            -moz-appearance: textfield;
+          }
+        `}</style>
         <div style={{ position: "relative", width: "100%" }}>
           <input
             type="number"
@@ -203,7 +213,7 @@ export default function SimpleWalletTab({
               transition: "border 0.15s ease"
             }}
           >
-            <img src="/assets/payments/mercado_pago.png" alt="Mercado Pago" style={{ height: "28px", objectFit: "contain" }} />
+            <img src="/assets/payments/mercado_pago.png" alt="Mercado Pago" style={{ height: "40px", objectFit: "contain" }} />
           </motion.button>
         </div>
       </div>

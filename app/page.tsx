@@ -12,18 +12,18 @@ import HomeTab from "@/components/tabs/HomeTab";
 import WalletTab from "@/components/tabs/WalletTab";
 import SimpleWalletTab from "@/components/tabs/SimpleWalletTab";
 import LocationTab from "@/components/tabs/LocationTab";
-import ProfileTab from "@/components/tabs/ProfileTab";
+import SimpleProfileTab from "@/components/tabs/SimpleProfileTab";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 
-import { 
-  drinksData, 
-  initialBarsData, 
-  usersData, 
-  pageVariants, 
-  staggerContainer, 
-  listItemVariants 
+import {
+  drinksData,
+  initialBarsData,
+  usersData,
+  pageVariants,
+  staggerContainer,
+  listItemVariants
 } from "@/data/mockData";
 
 /**
@@ -37,7 +37,7 @@ export default function Home() {
 
   const [tab, setTab] = useState<'home' | 'wallet' | 'promotions' | 'profile'>('home');
   const [selectedBarId, setSelectedBarId] = useState<number | null>(null);
-  
+
   const [selectedTap, setSelectedTap] = useState(2);
   const [direction, setDirection] = useState(1);
   const [bars, setBars] = useState(initialBarsData);
@@ -70,7 +70,7 @@ export default function Home() {
 
   // Beer pouring animation states
   const [isServing, setIsServing] = useState(false);
-  
+
   // INSTRUCCIONES PARA USAR VIDEO EN VEZ DE ANIMACION:
   // 1. Cambiá `useVideoForPouring` de false a true.
   // 2. Colocá tu archivo de video en la carpeta public, ej: /public/assets/videos/pouring_beer.mp4
@@ -162,15 +162,15 @@ export default function Home() {
         border: isMinor ? "#81C784" : "#FFBF00"
       },
       achievements: [
-        { 
-          icon: isMinor ? "🧃" : "🥇", 
-          name: isMinor ? "Junior Flow" : "Pionero", 
-          desc: isMinor ? "Explorando bares locales" : "Primer trago servido", 
-          color: isMinor ? "rgba(76, 175, 80, 0.1)" : "rgba(255, 191, 0, 0.12)" 
+        {
+          icon: isMinor ? "🧃" : "🥇",
+          name: isMinor ? "Junior Flow" : "Pionero",
+          desc: isMinor ? "Explorando bares locales" : "Primer trago servido",
+          color: isMinor ? "rgba(76, 175, 80, 0.1)" : "rgba(255, 191, 0, 0.12)"
         }
       ]
     };
-    
+
     setUsers((prev: any) => {
       const updated = { ...prev, [id]: newUser };
       localStorage.setItem("servite_users", JSON.stringify(updated));
@@ -271,11 +271,11 @@ export default function Home() {
 
   // Filtering bars list
   const filteredBars = bars.filter(bar => {
-    const matchesSearch = bar.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          bar.address.toLowerCase().includes(searchQuery.toLowerCase());
-    
+    const matchesSearch = bar.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      bar.address.toLowerCase().includes(searchQuery.toLowerCase());
+
     if (!matchesSearch) return false;
-    
+
     if (filter === 'favoritos') return bar.isFavorite;
     if (filter === 'saldo') return bar.balance > 0;
     if (filter === 'promociones') return bar.hasPromo;
@@ -320,9 +320,9 @@ export default function Home() {
               style={{ display: "flex", flexDirection: "column", gap: "var(--section-gap)" }}
             >
               {/* Fully coherent heart prop passed to BarInfo */}
-              <BarInfo 
-                name={activeBar.name} 
-                address={activeBar.address} 
+              <BarInfo
+                name={activeBar.name}
+                address={activeBar.address}
                 isFavorite={activeBar.isFavorite}
                 logo={activeBar.logo}
                 hasPromo={activeBar.hasPromo}
@@ -330,27 +330,108 @@ export default function Home() {
                 onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
                 theme={theme}
               />
-              
-              <TapsList 
-                drinks={activeBar.taps || []} 
-                selectedTap={selectedTap} 
-                onSelectTap={handleSelectTap} 
+
+              <TapsList
+                drinks={activeBar.taps || []}
+                selectedTap={selectedTap}
+                onSelectTap={handleSelectTap}
                 theme={theme}
               />
-              
-              <div style={{ position: "relative", overflow: "hidden", minHeight: "160px" }}>
-                <AnimatePresence mode="wait" custom={direction}>
-                  <DrinkCard 
-                    key={selectedDrink.id} 
-                    drink={selectedDrink} 
-                    direction={direction} 
-                    barBalance={activeBar.balance} 
-                    onServe={handleServe} 
-                    onAddFunds={handleAddFunds} 
-                    multiplier={activeBar.tapValueMultiplier}
-                    isMinor={currentUserProfile?.isMinor}
-                    theme={theme}
-                  />
+
+              <div style={{ position: "relative", display: "grid", overflowX: "hidden", margin: "0 -20px", padding: "10px 20px" }}>
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.div
+                    key={`slider-${selectedDrink.id}`}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction > 0 ? "100%" : "-100%" }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction < 0 ? "100%" : "-100%" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    style={{ gridArea: "1 / 1", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}
+                  >
+                    {/* Peek Previous Drink */}
+                    {activeBar.taps && activeBar.taps.length > 1 && (() => {
+                      const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                      const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
+                      const prevDrink = activeBar.taps[prevIndex];
+                      return (
+                        <div 
+                          onClick={() => handleSelectTap(prevDrink.id)}
+                          style={{ 
+                            position: "absolute",
+                            right: "calc(100% - 15px)", 
+                            width: "calc(100% - 40px)", 
+                            filter: "grayscale(100%) brightness(0.9)",
+                            transform: "scale(0.9)",
+                            transformOrigin: "right center",
+                            cursor: "pointer",
+                            pointerEvents: "auto",
+                            zIndex: 1
+                          }}>
+                          <DrinkCard 
+                            drink={prevDrink} 
+                            direction={direction} 
+                            barBalance={activeBar.balance} 
+                            onServe={() => {}} 
+                            onAddFunds={() => {}} 
+                            multiplier={activeBar.tapValueMultiplier}
+                            isMinor={currentUserProfile?.isMinor}
+                            theme={theme}
+                            isPeek={true}
+                          />
+                        </div>
+                      );
+                    })()}
+
+                    {/* Main Drink */}
+                    <div style={{ flex: "0 0 calc(100% - 40px)", position: "relative", zIndex: 2 }}>
+                      <DrinkCard 
+                        drink={selectedDrink} 
+                        direction={direction} 
+                        barBalance={activeBar.balance} 
+                        onServe={handleServe} 
+                        onAddFunds={handleAddFunds} 
+                        multiplier={activeBar.tapValueMultiplier}
+                        isMinor={currentUserProfile?.isMinor}
+                        theme={theme}
+                        isPeek={true}
+                      />
+                    </div>
+
+                    {/* Peek Next Drink */}
+                    {activeBar.taps && activeBar.taps.length > 1 && (() => {
+                      const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                      const nextIndex = currentIndex === -1 ? 1 : (currentIndex + 1) % activeBar.taps.length;
+                      const nextDrink = activeBar.taps[nextIndex];
+                      return (
+                        <div 
+                          onClick={() => handleSelectTap(nextDrink.id)}
+                          style={{ 
+                            position: "absolute",
+                            left: "calc(100% - 15px)", 
+                            width: "calc(100% - 40px)", 
+                            filter: "grayscale(100%) brightness(0.9)",
+                            transform: "scale(0.9)",
+                            transformOrigin: "left center",
+                            cursor: "pointer",
+                            pointerEvents: "auto",
+                            zIndex: 1
+                          }}>
+                          <DrinkCard 
+                            drink={nextDrink} 
+                            direction={direction} 
+                            barBalance={activeBar.balance} 
+                            onServe={() => {}} 
+                            onAddFunds={() => {}} 
+                            multiplier={activeBar.tapValueMultiplier}
+                            isMinor={currentUserProfile?.isMinor}
+                            theme={theme}
+                            isPeek={true}
+                          />
+                        </div>
+                      );
+                    })()}
+                  </motion.div>
                 </AnimatePresence>
               </div>
 
@@ -360,7 +441,7 @@ export default function Home() {
             // MAIN TAB PANELS
             <>
               {(tab === 'home' || tab === 'promotions') && (
-                <HomeTab 
+                <HomeTab
                   currentUser={currentUser}
                   users={users}
                   searchQuery={searchQuery}
@@ -383,7 +464,7 @@ export default function Home() {
 
               {tab === 'wallet' && (
                 useSimpleWallet ? (
-                  <SimpleWalletTab 
+                  <SimpleWalletTab
                     currentUser={currentUser}
                     users={users}
                     handleAddFunds={handleAddFunds}
@@ -391,7 +472,7 @@ export default function Home() {
                     setTab={setTab as any}
                   />
                 ) : (
-                  <WalletTab 
+                  <WalletTab
                     currentUser={currentUser}
                     users={users}
                     bars={bars}
@@ -406,7 +487,7 @@ export default function Home() {
 
               {/* location tab was removed from BottomNav, so this is no longer rendered through bottom nav but kept if needed */}
               {tab === 'location' as any && (
-                <LocationTab 
+                <LocationTab
                   currentUser={currentUser}
                   bars={bars}
                   setBars={setBars}
@@ -417,11 +498,11 @@ export default function Home() {
               )}
 
               {tab === 'profile' && (
-                <ProfileTab 
+                <SimpleProfileTab
                   currentUser={currentUser}
                   users={users}
-                  bars={bars}
                   handleLogout={handleLogout}
+                  setTab={setTab as any}
                   pageVariants={pageVariants}
                 />
               )}
@@ -448,7 +529,7 @@ export default function Home() {
       {/* Dynamic Beer Pouring Screen Overlay */}
       <AnimatePresence>
         {isServing && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -473,11 +554,11 @@ export default function Home() {
             {useVideoForPouring ? (
               <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", width: "100%", marginBottom: "15px" }}>
                 {/* Contenedor del Video */}
-                <video 
-                  src="/assets/videos/pouring_beer.mp4" 
-                  autoPlay 
-                  loop 
-                  muted 
+                <video
+                  src="/assets/videos/pouring_beer.mp4"
+                  autoPlay
+                  loop
+                  muted
                   playsInline
                   style={{ width: "220px", height: "100%", borderRadius: "24px", objectFit: "cover", boxShadow: "0 20px 45px rgba(0,0,0,0.65)" }}
                 />
@@ -485,7 +566,7 @@ export default function Home() {
             ) : (
               <>
                 {/* Inject self-contained premium css animations */}
-            <style>{`
+                <style>{`
               @keyframes rise-bubble {
                 0% {
                   transform: translateY(0) scale(0.7);
@@ -517,122 +598,122 @@ export default function Home() {
               }
             `}</style>
 
-            <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", width: "200px", marginBottom: "15px" }}>
+                <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", width: "200px", marginBottom: "15px" }}>
 
 
-              {/* Outline of Beer Glass */}
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
-                style={{
-                  width: "100px",
-                  height: "170px",
-                  border: "4px solid rgba(255, 255, 255, 0.9)",
-                  borderBottomWidth: "14px",
-                  borderTopWidth: "2px",
-                  borderRadius: "6px 6px 24px 24px",
-                  position: "absolute",
-                  bottom: "20px",
-                  overflow: "hidden",
-                  boxShadow: "0 20px 45px rgba(0,0,0,0.65), inset 0 2px 10px rgba(255,255,255,0.2)",
-                  backgroundColor: "rgba(255,255,255,0.04)"
-                }}
-              >
-                {/* Cold dew condensation droplets */}
-                {servingProgress > 15 && (
-                  <>
-                    <div style={{ position: "absolute", top: "35px", left: "15px", width: "3px", height: "8px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.3)", zIndex: 4 }} />
-                    <div style={{ position: "absolute", top: "85px", right: "20px", width: "4px", height: "12px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.25)", zIndex: 4 }} />
-                    <div style={{ position: "absolute", top: "120px", left: "28px", width: "3px", height: "6px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.25)", zIndex: 4 }} />
-                  </>
-                )}
+                  {/* Outline of Beer Glass */}
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
+                    style={{
+                      width: "100px",
+                      height: "170px",
+                      border: "4px solid rgba(255, 255, 255, 0.9)",
+                      borderBottomWidth: "14px",
+                      borderTopWidth: "2px",
+                      borderRadius: "6px 6px 24px 24px",
+                      position: "absolute",
+                      bottom: "20px",
+                      overflow: "hidden",
+                      boxShadow: "0 20px 45px rgba(0,0,0,0.65), inset 0 2px 10px rgba(255,255,255,0.2)",
+                      backgroundColor: "rgba(255,255,255,0.04)"
+                    }}
+                  >
+                    {/* Cold dew condensation droplets */}
+                    {servingProgress > 15 && (
+                      <>
+                        <div style={{ position: "absolute", top: "35px", left: "15px", width: "3px", height: "8px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.3)", zIndex: 4 }} />
+                        <div style={{ position: "absolute", top: "85px", right: "20px", width: "4px", height: "12px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.25)", zIndex: 4 }} />
+                        <div style={{ position: "absolute", top: "120px", left: "28px", width: "3px", height: "6px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.25)", zIndex: 4 }} />
+                      </>
+                    )}
 
-                {/* Glass reflection highlight */}
-                <div style={{
-                  position: "absolute",
-                  top: 0,
-                  left: "12px",
-                  width: "8px",
-                  height: "100%",
-                  background: "linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0))",
-                  zIndex: 4,
-                  pointerEvents: "none"
-                }} />
-
-                {/* Golden liquid height matching progress with slosh physics */}
-                <div style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: `${servingProgress}%`,
-                  background: "linear-gradient(to top, #FF6600 0%, #FFBF00 100%)",
-                  transition: "height 0.1s linear",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  animation: servingProgress > 0 && servingProgress < 100 ? "slosh-liquid 1.8s infinite ease-in-out" : "none",
-                  transformOrigin: "bottom center"
-                }}>
-                  {/* Ascending dynamic bubbles inside beer */}
-                  {servingProgress > 0 && servingProgress < 100 && (
-                    <>
-                      {[...Array(12)].map((_, i) => {
-                        const bubbleDelay = i * 0.18;
-                        const leftPos = 12 + (i * 8.5) % 76;
-                        const size = 3 + (i % 3);
-                        return (
-                          <div
-                            key={i}
-                            style={{
-                              position: "absolute",
-                              bottom: 0,
-                              left: `${leftPos}%`,
-                              width: `${size}px`,
-                              height: `${size}px`,
-                              borderRadius: "50%",
-                              backgroundColor: "rgba(255, 255, 255, 0.7)",
-                              boxShadow: "0 0 3px rgba(255, 255, 255, 0.4)",
-                              animation: "rise-bubble 1.3s infinite linear",
-                              animationDelay: `${bubbleDelay}s`,
-                              zIndex: 1
-                            }}
-                          />
-                        );
-                      })}
-                    </>
-                  )}
-
-                  {/* Thick creamy Foam head rising on top of the beer */}
-                  <div style={{
-                    height: servingProgress > 0 ? "24px" : "0",
-                    backgroundColor: "#fff",
-                    boxShadow: "0 -3px 12px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(0,0,0,0.05)",
-                    position: "absolute",
-                    top: "-12px",
-                    left: 0,
-                    right: 0,
-                    zIndex: 2,
-                    animation: "foam-wobble 2s infinite ease-in-out",
-                    transformOrigin: "bottom center",
-                    transition: "height 0.2s"
-                  }}>
-                    {/* Tiny foam bubbles overlay */}
+                    {/* Glass reflection highlight */}
                     <div style={{
                       position: "absolute",
-                      top: "2px",
-                      left: "10%",
-                      width: "80%",
-                      height: "4px",
-                      borderTop: "1.5px dotted rgba(0,0,0,0.08)",
-                      opacity: 0.6
+                      top: 0,
+                      left: "12px",
+                      width: "8px",
+                      height: "100%",
+                      background: "linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0))",
+                      zIndex: 4,
+                      pointerEvents: "none"
                     }} />
-                  </div>
+
+                    {/* Golden liquid height matching progress with slosh physics */}
+                    <div style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: `${servingProgress}%`,
+                      background: "linear-gradient(to top, #FF6600 0%, #FFBF00 100%)",
+                      transition: "height 0.1s linear",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      animation: servingProgress > 0 && servingProgress < 100 ? "slosh-liquid 1.8s infinite ease-in-out" : "none",
+                      transformOrigin: "bottom center"
+                    }}>
+                      {/* Ascending dynamic bubbles inside beer */}
+                      {servingProgress > 0 && servingProgress < 100 && (
+                        <>
+                          {[...Array(12)].map((_, i) => {
+                            const bubbleDelay = i * 0.18;
+                            const leftPos = 12 + (i * 8.5) % 76;
+                            const size = 3 + (i % 3);
+                            return (
+                              <div
+                                key={i}
+                                style={{
+                                  position: "absolute",
+                                  bottom: 0,
+                                  left: `${leftPos}%`,
+                                  width: `${size}px`,
+                                  height: `${size}px`,
+                                  borderRadius: "50%",
+                                  backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                  boxShadow: "0 0 3px rgba(255, 255, 255, 0.4)",
+                                  animation: "rise-bubble 1.3s infinite linear",
+                                  animationDelay: `${bubbleDelay}s`,
+                                  zIndex: 1
+                                }}
+                              />
+                            );
+                          })}
+                        </>
+                      )}
+
+                      {/* Thick creamy Foam head rising on top of the beer */}
+                      <div style={{
+                        height: servingProgress > 0 ? "24px" : "0",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 -3px 12px rgba(255,255,255,0.9), inset 0 -3px 6px rgba(0,0,0,0.05)",
+                        position: "absolute",
+                        top: "-12px",
+                        left: 0,
+                        right: 0,
+                        zIndex: 2,
+                        animation: "foam-wobble 2s infinite ease-in-out",
+                        transformOrigin: "bottom center",
+                        transition: "height 0.2s"
+                      }}>
+                        {/* Tiny foam bubbles overlay */}
+                        <div style={{
+                          position: "absolute",
+                          top: "2px",
+                          left: "10%",
+                          width: "80%",
+                          height: "4px",
+                          borderTop: "1.5px dotted rgba(0,0,0,0.08)",
+                          opacity: 0.6
+                        }} />
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-              </motion.div>
-            </div>
-            </>
+              </>
             )}
 
             {/* Pouring status messages */}
@@ -643,7 +724,7 @@ export default function Home() {
                 <>¡Pinta Servida! 🎉</>
               )}
             </h2>
-            
+
             <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "8px", maxWidth: "250px", lineHeight: "1.5" }}>
               {servingProgress < 100 ? (
                 <>Llenando {servingQuantity} pinta{servingQuantity > 1 ? "s" : ""} de <strong style={{ color: "#FFBF00" }}>{servingDrinkName}</strong>...</>
@@ -657,7 +738,7 @@ export default function Home() {
               {servingProgress < 100 ? (
                 <>{servingProgress}%</>
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}

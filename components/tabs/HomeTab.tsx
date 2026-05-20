@@ -64,28 +64,28 @@ export default function HomeTab({
     >
       {/* User Profile Greeting Section */}
       <div style={{ position: "relative" }}>
-        <div 
+        <div
           onClick={() => setTab('profile')}
           style={{ display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
             <div style={{ position: "relative" }}>
               {/* Outer container with yellow border */}
-              <div style={{ 
-                width: "55px", 
-                height: "55px", 
-                borderRadius: "50%", 
+              <div style={{
+                width: "55px",
+                height: "55px",
+                borderRadius: "50%",
                 border: `2px solid ${currentUser ? users[currentUser].avatar.border : '#FFBF00'}`,
-                display: "flex", 
-                justifyContent: "center", 
+                display: "flex",
+                justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "#FFF"
               }}>
                 {/* Inner container with overflow: hidden */}
-                <div style={{ 
-                  width: "100%", 
-                  height: "100%", 
-                  borderRadius: "50%", 
+                <div style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
                   position: "relative",
                   overflow: "hidden",
                   display: "flex",
@@ -105,7 +105,7 @@ export default function HomeTab({
               <h2 style={{ fontSize: "22px", fontWeight: "bold", fontFamily: "var(--font-family-title)" }}>{currentUser ? users[currentUser].name : 'Sofia'}</h2>
             </div>
           </div>
-          <div 
+          <div
             onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
             style={{ padding: "8px", zIndex: 10 }}
           >
@@ -116,7 +116,7 @@ export default function HomeTab({
         {/* Dropdown Menu */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -146,12 +146,12 @@ export default function HomeTab({
       {/* Search Bar */}
       <div style={{ display: "flex", alignItems: "center", backgroundColor: "#e9ecef", padding: "12px 18px", borderRadius: "24px", gap: "12px" }}>
         <Search size={18} color="#9ca3af" />
-        <input 
-          type="text" 
-          placeholder="Buscar" 
+        <input
+          type="text"
+          placeholder="Buscar"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ border: "none", backgroundColor: "transparent", outline: "none", fontSize: "14px", width: "100%", fontWeight: "600", color: "#1A1716" }} 
+          style={{ border: "none", backgroundColor: "transparent", outline: "none", fontSize: "14px", width: "100%", fontWeight: "600", color: "#1A1716" }}
         />
       </div>
 
@@ -164,41 +164,41 @@ export default function HomeTab({
       {/* Filter Chips */}
       <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "8px", scrollbarWidth: "none", marginTop: "4px", justifyContent: "space-between" }}>
         {/* Cercanos */}
-        <motion.button 
+        <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setFilter('cercanos')}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'cercanos' ? "#28a745" : "#E9ECEF", 
-            color: filter === 'cercanos' ? "#fff" : "#1A1716", 
+          style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            backgroundColor: filter === 'cercanos' ? "#1A1716" : "#E9ECEF",
+            color: filter === 'cercanos' ? "#fff" : "#1A1716",
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
         >
           <MapPin size={12} /> Cercanos
         </motion.button>
-        
+
         {/* Favoritos */}
-        <motion.button 
+        <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setFilter('favoritos')}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'favoritos' ? "#dc3545" : "#E9ECEF", 
-            color: filter === 'favoritos' ? "#fff" : "#1A1716", 
+          style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            backgroundColor: filter === 'favoritos' ? "#FF6600" : "#E9ECEF",
+            color: filter === 'favoritos' ? "#fff" : "#1A1716",
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
         >
           <Heart size={12} fill={filter === 'favoritos' ? "#fff" : "none"} /> Favoritos
         </motion.button>
-        
+
         {/* Saldo */}
-        <motion.button 
+        <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setFilter('saldo')}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'saldo' ? "#007bff" : "#E9ECEF", 
-            color: filter === 'saldo' ? "#fff" : "#1A1716", 
+          style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            backgroundColor: filter === 'saldo' ? "#FFBF00" : "#E9ECEF",
+            color: filter === 'saldo' ? "#1A1716" : "#1A1716",
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
         >
@@ -206,13 +206,13 @@ export default function HomeTab({
         </motion.button>
 
         {/* Promociones */}
-        <motion.button 
+        <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setFilter('promociones')}
-          style={{ 
-            display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'promociones' ? "#6f42c1" : "#E9ECEF", 
-            color: filter === 'promociones' ? "#fff" : "#1A1716", 
+          style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            backgroundColor: filter === 'promociones' ? "#FFBF00" : "#E9ECEF",
+            color: filter === 'promociones' ? "#1A1716" : "#1A1716",
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
         >
@@ -221,7 +221,7 @@ export default function HomeTab({
       </div>
 
       {/* Bars Cards List */}
-      <motion.div 
+      <motion.div
         className="bars-list"
         variants={staggerContainer}
         initial="hidden"
@@ -230,7 +230,7 @@ export default function HomeTab({
       >
         {filteredBars.length > 0 ? (
           filteredBars.map((bar) => (
-            <motion.div 
+            <motion.div
               key={bar.id}
               variants={listItemVariants}
               onClick={() => onBarClick(bar.id)}
@@ -238,7 +238,7 @@ export default function HomeTab({
               style={{ display: "flex", gap: "16px", cursor: "pointer", position: "relative", backgroundColor: "#E9ECEF", padding: "12px", borderRadius: "12px" }}
             >
               {/* Coherent Favorites Heart Icon */}
-              <div 
+              <div
                 onClick={(e) => onToggleFavorite(bar.id, e)}
                 style={{
                   position: "absolute",
@@ -252,17 +252,17 @@ export default function HomeTab({
                   alignItems: "center"
                 }}
               >
-                <Heart 
-                  size={18} 
-                  fill={bar.isFavorite ? "#FF6600" : "none"} 
-                  color={bar.isFavorite ? "#FF6600" : "#6c757d"} 
+                <Heart
+                  size={18}
+                  fill={bar.isFavorite ? "#FF6600" : "none"}
+                  color={bar.isFavorite ? "#FF6600" : "#6c757d"}
                   style={{ transition: "transform 0.15s" }}
                 />
               </div>
 
-              <div 
-                className="bar-logo-container" 
-                style={{ 
+              <div
+                className="bar-logo-container"
+                style={{
                   backgroundColor: bar.logo.toLowerCase().includes("negro") ? "#fff" : "#1A1716",
                   display: "flex",
                   justifyContent: "center",
@@ -275,18 +275,18 @@ export default function HomeTab({
                 }}
               >
                 <div style={{ position: "relative", width: "100%", height: "100%" }}>
-                  <Image 
-                    src={bar.logo} 
-                    alt={bar.name} 
-                    fill 
-                    style={{ 
+                  <Image
+                    src={bar.logo}
+                    alt={bar.name}
+                    fill
+                    style={{
                       objectFit: bar.logo.toLowerCase().includes(".jpg") ? "cover" : "contain",
                       padding: bar.logo.toLowerCase().includes(".jpg") ? "0" : "5px"
-                    }} 
+                    }}
                   />
                 </div>
               </div>
-              
+
               {/* Bar Info */}
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: "bold", fontSize: "16px", color: "#1A1716", fontFamily: "var(--font-family-title)" }}>{bar.name}</div>
@@ -300,17 +300,17 @@ export default function HomeTab({
                 </div>
 
                 {/* Indicador de promo activa — viene de breweries.json */}
-                {bar.hasPromo && (
+                {/* bar.hasPromo && (
                   <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "4px" }}>
-                    <PromoBadgeIcon size={11} fillColor="#FFBF00" strokeColor="none" percentColor="#1A1716" />
+                    <PromoBadgeIcon size={11} fillColor="transparent" strokeColor="#1A1716" percentColor="#1A1716" />
                     <span style={{ fontSize: "10px", color: "#9B7400", fontWeight: "700", letterSpacing: "0.2px" }}>Promo activa</span>
                   </div>
-                )}
+                ) */}
               </div>
             </motion.div>
           ))
         ) : (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             style={{ textAlign: "center", padding: "40px 20px", color: "var(--text-secondary)", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}

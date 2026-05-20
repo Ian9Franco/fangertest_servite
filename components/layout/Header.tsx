@@ -34,7 +34,7 @@ export default function Header({ onBack, onHome, hideBack = false, theme = 'ligh
             }}
             onClick={onBack}
           >
-            <ChevronLeft size={24} color="#FF6600" />
+            <ChevronLeft size={24} color="#4A4A4A" />
           </motion.button>
         )}
       </div>
@@ -57,7 +57,7 @@ export default function Header({ onBack, onHome, hideBack = false, theme = 'ligh
       
       {/* Right Icons / Theme Toggle */}
       <div style={{ width: "28px", height: "28px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {toggleTheme && (
+        {toggleTheme && false && (
           <motion.button
             whileTap={{ scale: 0.8 }}
             whileHover={{ scale: 1.1 }}

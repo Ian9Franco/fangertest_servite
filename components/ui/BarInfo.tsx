@@ -89,17 +89,16 @@ export default function BarInfo({
             style={{ 
               cursor: "pointer", 
               display: "flex", 
-              padding: "5px", 
-              borderRadius: "50%", 
-              border: hasPromo ? "none" : "1.5px solid var(--border-color)",
+              padding: "0px", 
+              border: "none",
               backgroundColor: "transparent",
             }}
             title={hasPromo ? "Editar promoción" : "Agregar promoción"}
           >
             <PromoBadgeIcon
-              size={22}
-              fillColor={hasPromo ? "#FFBF00" : "transparent"}
-              strokeColor={hasPromo ? "none" : "var(--border-color)"}
+              size={24}
+              fillColor="transparent"
+              strokeColor={hasPromo ? "#1A1716" : "var(--border-color)"}
               percentColor={hasPromo ? "#1A1716" : "var(--text-secondary)"}
             />
           </motion.div>

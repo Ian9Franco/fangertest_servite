@@ -25,6 +25,7 @@ interface DrinkCardProps {
   multiplier?: number; // Dynamic price multiplier prop
   isMinor?: boolean; // Underage blocker flag
   theme?: 'light' | 'dark';
+  isPeek?: boolean;
 }
 
 const cardVariants = {
@@ -42,7 +43,7 @@ const cardVariants = {
   }),
 };
 
-export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0, isMinor = false, theme = 'light' }: DrinkCardProps) {
+export default function DrinkCard({ drink, direction = 1, barBalance, onServe, onAddFunds, multiplier = 1.0, isMinor = false, theme = 'light', isPeek = false }: DrinkCardProps) {
   const [quantity, setQuantity] = useState(1);
   const [isShaking, setIsShaking] = useState(false);
 
@@ -58,10 +59,10 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
       <motion.div 
         className="drink-card selected"
         custom={direction}
-        variants={cardVariants}
-        initial="enter"
-        animate="center"
-        exit="exit"
+        variants={isPeek ? undefined : cardVariants}
+        initial={isPeek ? false : "enter"}
+        animate={isPeek ? false : "center"}
+        exit={isPeek ? undefined : "exit"}
         style={{ 
           backgroundColor: "#E9ECEF", 
           padding: "18px", 
@@ -159,10 +160,10 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
     <motion.div 
       className="drink-card selected"
       custom={direction}
-      variants={cardVariants}
-      initial="enter"
-      animate={isShaking ? { x: [0, -6, 6, -6, 6, -4, 4, 0] } : "center"}
-      exit="exit"
+      variants={isPeek ? undefined : cardVariants}
+      initial={isPeek ? false : "enter"}
+      animate={isShaking ? { x: [0, -6, 6, -6, 6, -4, 4, 0] } : (isPeek ? false : "center")}
+      exit={isPeek ? undefined : "exit"}
       transition={isShaking 
         ? { x: { type: "keyframes", duration: 0.4 } } 
         : { x: { type: "spring", stiffness: 350, damping: 28 }, opacity: { duration: 0.2 } }
@@ -284,7 +285,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
             justifyContent: "center",
             alignItems: "center",
             gap: "10px",
-            backgroundColor: isInsufficient ? "#dc3545" : "var(--text-primary)",
+            backgroundColor: isPeek ? "#8B8B8B" : (isInsufficient ? "#dc3545" : "var(--text-primary)"),
             color: "var(--bg-color)",
             boxShadow: "none",
             transition: "background-color 0.2s, color 0.3s ease"
