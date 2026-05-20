@@ -29,6 +29,15 @@ import {
   listItemVariants
 } from "@/data/mockData";
 
+// Definimos la interfaz estricta para las transacciones
+interface Transaction {
+  title: string;
+  desc: string;
+  amt: string;
+  type: "in" | "out";
+  date: string;
+}
+
 /**
  * Main Home Entry Component
  * SERVITE FANGER Application Shell
@@ -53,10 +62,12 @@ export default function Home() {
 
   // Dynamic user data and transaction states for real-time updates
   const [users, setUsers] = useState(usersData);
-  const [transactions, setTransactions] = useState([
-    { title: "Carga rápida", desc: "Crédito aprobado", amt: "+$1000", type: "in", date: "Hoy, 14:23" },
-    { title: "Cervecería Blest", desc: "1 Pinta - Bambú Ipa", amt: "-$500", type: "out", date: "Ayer, 21:05" },
-    { title: "La Choppería", desc: "1 Pinta - Pilsner", amt: "-$400", type: "out", date: "15 May, 19:40" },
+  const [transactions, setTransactions] = useState<
+    { title: string; desc: string; amt: string; type: "in" | "out"; date: string }[]
+  >([
+    { title: "Carga rápida", desc: "crédito aprobado.", amt: "+$1000", type: "in", date: "Hoy, 14:23" },
+    { title: "Cervecería Blest", desc: "1 pinta - Bambú Ipa", amt: "-$500", type: "out", date: "Ayer, 21:05" },
+    { title: "La Choppería", desc: "1 pinta - Pilsner", amt: "-$400", type: "out", date: "15 May, 19:40" },
   ]);
 
   // Payment methods state including a default linked Visa credit card
@@ -225,7 +236,7 @@ export default function Home() {
     // Record credit transaction
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    setTransactions((prev: any[]) => [
+    setTransactions((prev: Transaction[]) => [
       { title: "Carga de saldo", desc: "Crédito aprobado", amt: `+$${amount}`, type: "in", date: `Hoy, ${timeStr}` },
       ...prev
     ]);
@@ -240,7 +251,7 @@ export default function Home() {
     // 2. Add transaction to activity history
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    setTransactions((prev: any[]) => [
+    setTransactions((prev: Transaction[]) => [
       { title: activeBar.name, desc: `${quantity} Pinta${quantity > 1 ? 's' : ''} - ${drinkName}`, amt: `-$${totalCost}`, type: "out", date: `Hoy, ${timeStr}` },
       ...prev
     ]);
@@ -415,12 +426,12 @@ export default function Home() {
                           const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
                           const prevDrink = activeBar.taps[prevIndex];
                           return (
-                            <div 
+                            <div
                               onClick={() => handleSelectTap(prevDrink.id)}
-                              style={{ 
+                              style={{
                                 position: "absolute",
-                                right: "calc(100% - 15px)", 
-                                width: "calc(100% - 40px)", 
+                                right: "calc(100% - 15px)",
+                                width: "calc(100% - 40px)",
                                 filter: "grayscale(100%) brightness(0.9)",
                                 transform: "scale(0.9)",
                                 transformOrigin: "right center",
@@ -428,12 +439,12 @@ export default function Home() {
                                 pointerEvents: "auto",
                                 zIndex: 1
                               }}>
-                              <DrinkCard 
-                                drink={prevDrink} 
-                                direction={direction} 
-                                barBalance={activeBar.balance} 
-                                onServe={() => {}} 
-                                onAddFunds={() => {}} 
+                              <DrinkCard
+                                drink={prevDrink}
+                                direction={direction}
+                                barBalance={activeBar.balance}
+                                onServe={() => { }}
+                                onAddFunds={() => { }}
                                 multiplier={activeBar.tapValueMultiplier}
                                 isMinor={currentUserProfile?.isMinor}
                                 theme={theme}
@@ -445,12 +456,12 @@ export default function Home() {
 
                         {/* Main Drink */}
                         <div style={{ flex: "0 0 calc(100% - 40px)", position: "relative", zIndex: 2 }}>
-                          <DrinkCard 
-                            drink={selectedDrink} 
-                            direction={direction} 
-                            barBalance={activeBar.balance} 
-                            onServe={handleServe} 
-                            onAddFunds={handleAddFunds} 
+                          <DrinkCard
+                            drink={selectedDrink}
+                            direction={direction}
+                            barBalance={activeBar.balance}
+                            onServe={handleServe}
+                            onAddFunds={handleAddFunds}
                             multiplier={activeBar.tapValueMultiplier}
                             isMinor={currentUserProfile?.isMinor}
                             theme={theme}
@@ -464,12 +475,12 @@ export default function Home() {
                           const nextIndex = currentIndex === -1 ? 1 : (currentIndex + 1) % activeBar.taps.length;
                           const nextDrink = activeBar.taps[nextIndex];
                           return (
-                            <div 
+                            <div
                               onClick={() => handleSelectTap(nextDrink.id)}
-                              style={{ 
+                              style={{
                                 position: "absolute",
-                                left: "calc(100% - 15px)", 
-                                width: "calc(100% - 40px)", 
+                                left: "calc(100% - 15px)",
+                                width: "calc(100% - 40px)",
                                 filter: "grayscale(100%) brightness(0.9)",
                                 transform: "scale(0.9)",
                                 transformOrigin: "left center",
@@ -477,12 +488,12 @@ export default function Home() {
                                 pointerEvents: "auto",
                                 zIndex: 1
                               }}>
-                              <DrinkCard 
-                                drink={nextDrink} 
-                                direction={direction} 
-                                barBalance={activeBar.balance} 
-                                onServe={() => {}} 
-                                onAddFunds={() => {}} 
+                              <DrinkCard
+                                drink={nextDrink}
+                                direction={direction}
+                                barBalance={activeBar.balance}
+                                onServe={() => { }}
+                                onAddFunds={() => { }}
                                 multiplier={activeBar.tapValueMultiplier}
                                 isMinor={currentUserProfile?.isMinor}
                                 theme={theme}
@@ -578,21 +589,6 @@ export default function Home() {
           )}
         </AnimatePresence>
       </main>
-
-      {/* 
-      <BottomNav 
-        activeTab={tab as 'home' | 'wallet' | 'promotions' | 'profile'} 
-        setActiveTab={(newTab) => {
-          setSelectedBarId(null);
-          setTab(newTab);
-          if (newTab === 'promotions') {
-            setFilter('promociones');
-          } else if (newTab === 'home' && filter === 'promociones') {
-            setFilter('cercanos');
-          }
-        }} 
-      /> 
-      */}
 
       {/* Dynamic Beer Pouring Screen Overlay */}
       <AnimatePresence>
