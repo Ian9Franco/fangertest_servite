@@ -175,9 +175,10 @@ export default function SimpleWalletTab({
               alignItems: "center",
               justifyContent: "center",
               gap: "8px",
+              height: "60px",
               backgroundColor: "#E9ECEF",
               border: selectedMethod === "card" ? "2px solid #FFBF00" : "2px solid transparent",
-              borderRadius: "30px",
+              borderRadius: "16px",
               padding: "14px 10px",
               fontSize: "11px",
               fontWeight: "bold",
@@ -201,19 +202,21 @@ export default function SimpleWalletTab({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "8px",
+              height: "60px",
               backgroundColor: "#E9ECEF",
               border: selectedMethod === "mercadopago" ? "2px solid #FFBF00" : "2px solid transparent",
-              borderRadius: "30px",
-              padding: "14px 10px",
-              fontSize: "11px",
-              fontWeight: "bold",
-              color: "#1A1716",
+              borderRadius: "16px",
+              padding: "4px 8px",
               cursor: "pointer",
+              overflow: "hidden",
               transition: "border 0.15s ease"
             }}
           >
-            <img src="/assets/payments/mercado_pago.png" alt="Mercado Pago" style={{ height: "40px", objectFit: "contain" }} />
+            <img
+              src="/assets/payments/mercado_pago.png"
+              alt="Mercado Pago"
+              style={{ width: "100%", height: "100%", objectFit: "contain", transform: "scale(1.4)" }}
+            />
           </motion.button>
         </div>
       </div>
