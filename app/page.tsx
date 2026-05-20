@@ -13,6 +13,8 @@ import WalletTab from "@/components/tabs/WalletTab";
 import SimpleWalletTab from "@/components/tabs/SimpleWalletTab";
 import LocationTab from "@/components/tabs/LocationTab";
 import SimpleProfileTab from "@/components/tabs/SimpleProfileTab";
+import TransferTab from "@/components/tabs/TransferTab";
+import ActivityTab from "@/components/tabs/ActivityTab";
 import PromoModal from "@/components/ui/PromoModal";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -38,6 +40,8 @@ export default function Home() {
 
   const [tab, setTab] = useState<'home' | 'wallet' | 'promotions' | 'profile'>('home');
   const [selectedBarId, setSelectedBarId] = useState<number | null>(null);
+  // Sub-view shown inside the bar detail screen
+  const [barSubView, setBarSubView] = useState<null | 'wallet' | 'transfer' | 'activity'>(null);
 
   const [selectedTap, setSelectedTap] = useState(2);
   const [direction, setDirection] = useState(1);
@@ -285,7 +289,11 @@ export default function Home() {
   });
 
   const handleHeaderBack = () => {
-    setSelectedBarId(null);
+    if (barSubView) {
+      setBarSubView(null);
+    } else {
+      setSelectedBarId(null);
+    }
   };
 
   // Determine header context back arrow visibility
@@ -313,148 +321,190 @@ export default function Home() {
         <AnimatePresence mode="wait">
           {/* BAR DETAILS VIEW (DECOUPLED FROM HOME TAB) */}
           {selectedBarId !== null && activeBar ? (
-            <motion.div
-              key={`bar-detail-${activeBar.id}`}
-              variants={pageVariants}
-              initial="initial"
-              animate="enter"
-              exit="exit"
-              style={{ display: "flex", flexDirection: "column", gap: "var(--section-gap)" }}
-            >
-              {/* Fully coherent heart prop passed to BarInfo */}
-              <BarInfo
-                name={activeBar.name}
-                address={activeBar.address}
-                isFavorite={activeBar.isFavorite}
-                logo={activeBar.logo}
-                hasPromo={activeBar.hasPromo}
-                promoText={activeBar.promoText}
-                onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
-                onEditPromo={() => setIsPromoModalOpen(true)}
-                theme={theme}
-              />
+            <AnimatePresence mode="wait">
+              {/* ── Sub-view: Cargar saldo ─────────────────────────── */}
+              {barSubView === 'wallet' ? (
+                <SimpleWalletTab
+                  key="bar-sub-wallet"
+                  currentUser={currentUser}
+                  users={users}
+                  handleAddFunds={handleAddFunds}
+                  pageVariants={pageVariants}
+                  setTab={() => setBarSubView(null)}
+                />
+              ) : barSubView === 'transfer' ? (
+                /* ── Sub-view: Transferir ─────────────────────────── */
+                <TransferTab
+                  key="bar-sub-transfer"
+                  currentUser={currentUser}
+                  users={users}
+                  bars={bars}
+                  selectedBarId={selectedBarId}
+                  handleAddFunds={handleAddFunds}
+                  pageVariants={pageVariants}
+                  onBack={() => setBarSubView(null)}
+                />
+              ) : barSubView === 'activity' ? (
+                /* ── Sub-view: Actividad ──────────────────────────── */
+                <ActivityTab
+                  key="bar-sub-activity"
+                  barName={activeBar.name}
+                  transactions={transactions}
+                  pageVariants={pageVariants}
+                  onBack={() => setBarSubView(null)}
+                />
+              ) : (
+                /* ── Main bar detail ──────────────────────────────── */
+                <motion.div
+                  key={`bar-detail-${activeBar.id}`}
+                  variants={pageVariants}
+                  initial="initial"
+                  animate="enter"
+                  exit="exit"
+                  style={{ display: "flex", flexDirection: "column", gap: "var(--section-gap)" }}
+                >
+                  {/* Fully coherent heart prop passed to BarInfo */}
+                  <BarInfo
+                    name={activeBar.name}
+                    address={activeBar.address}
+                    isFavorite={activeBar.isFavorite}
+                    logo={activeBar.logo}
+                    hasPromo={activeBar.hasPromo}
+                    promoText={activeBar.promoText}
+                    onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
+                    onEditPromo={() => setIsPromoModalOpen(true)}
+                    theme={theme}
+                  />
 
-              <TapsList
-                drinks={activeBar.taps || []}
-                selectedTap={selectedTap}
-                onSelectTap={handleSelectTap}
-                theme={theme}
-              />
+                  <TapsList
+                    drinks={activeBar.taps || []}
+                    selectedTap={selectedTap}
+                    onSelectTap={handleSelectTap}
+                    theme={theme}
+                  />
 
-              <div style={{ position: "relative", display: "grid", overflowX: "hidden", margin: "0 -20px", padding: "10px 20px" }}>
-                <AnimatePresence initial={false} custom={direction}>
-                  <motion.div
-                    key={`slider-${selectedDrink.id}`}
-                    custom={direction}
-                    initial={{ opacity: 0, x: direction > 0 ? "100%" : "-100%" }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction < 0 ? "100%" : "-100%" }}
-                    transition={{ type: "spring", stiffness: 220, damping: 28, mass: 0.8 }}
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.5}
-                    onDragEnd={(e, { offset }) => {
-                      if (!activeBar.taps || activeBar.taps.length <= 1) return;
-                      if (offset.x < -40) {
-                        const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
-                        const nextIndex = (currentIndex + 1) % activeBar.taps.length;
-                        handleSelectTap(activeBar.taps[nextIndex].id);
-                      } else if (offset.x > 40) {
-                        const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
-                        const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
-                        handleSelectTap(activeBar.taps[prevIndex].id);
-                      }
-                    }}
-                    style={{ gridArea: "1 / 1", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", cursor: "grab" }}
-                  >
-                    {/* Peek Previous Drink */}
-                    {activeBar.taps && activeBar.taps.length > 1 && (() => {
-                      const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
-                      const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
-                      const prevDrink = activeBar.taps[prevIndex];
-                      return (
-                        <div 
-                          onClick={() => handleSelectTap(prevDrink.id)}
-                          style={{ 
-                            position: "absolute",
-                            right: "calc(100% - 15px)", 
-                            width: "calc(100% - 40px)", 
-                            filter: "grayscale(100%) brightness(0.9)",
-                            transform: "scale(0.9)",
-                            transformOrigin: "right center",
-                            cursor: "pointer",
-                            pointerEvents: "auto",
-                            zIndex: 1
-                          }}>
+                  <div style={{ position: "relative", display: "grid", overflowX: "hidden", margin: "0 -20px", padding: "10px 20px" }}>
+                    <AnimatePresence initial={false} custom={direction}>
+                      <motion.div
+                        key={`slider-${selectedDrink.id}`}
+                        custom={direction}
+                        initial={{ opacity: 0, x: direction > 0 ? "100%" : "-100%" }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: direction < 0 ? "100%" : "-100%" }}
+                        transition={{ type: "spring", stiffness: 220, damping: 28, mass: 0.8 }}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.5}
+                        onDragEnd={(e, { offset }) => {
+                          if (!activeBar.taps || activeBar.taps.length <= 1) return;
+                          if (offset.x < -40) {
+                            const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                            const nextIndex = (currentIndex + 1) % activeBar.taps.length;
+                            handleSelectTap(activeBar.taps[nextIndex].id);
+                          } else if (offset.x > 40) {
+                            const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                            const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
+                            handleSelectTap(activeBar.taps[prevIndex].id);
+                          }
+                        }}
+                        style={{ gridArea: "1 / 1", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", cursor: "grab" }}
+                      >
+                        {/* Peek Previous Drink */}
+                        {activeBar.taps && activeBar.taps.length > 1 && (() => {
+                          const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                          const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
+                          const prevDrink = activeBar.taps[prevIndex];
+                          return (
+                            <div 
+                              onClick={() => handleSelectTap(prevDrink.id)}
+                              style={{ 
+                                position: "absolute",
+                                right: "calc(100% - 15px)", 
+                                width: "calc(100% - 40px)", 
+                                filter: "grayscale(100%) brightness(0.9)",
+                                transform: "scale(0.9)",
+                                transformOrigin: "right center",
+                                cursor: "pointer",
+                                pointerEvents: "auto",
+                                zIndex: 1
+                              }}>
+                              <DrinkCard 
+                                drink={prevDrink} 
+                                direction={direction} 
+                                barBalance={activeBar.balance} 
+                                onServe={() => {}} 
+                                onAddFunds={() => {}} 
+                                multiplier={activeBar.tapValueMultiplier}
+                                isMinor={currentUserProfile?.isMinor}
+                                theme={theme}
+                                isPeek={true}
+                              />
+                            </div>
+                          );
+                        })()}
+
+                        {/* Main Drink */}
+                        <div style={{ flex: "0 0 calc(100% - 40px)", position: "relative", zIndex: 2 }}>
                           <DrinkCard 
-                            drink={prevDrink} 
+                            drink={selectedDrink} 
                             direction={direction} 
                             barBalance={activeBar.balance} 
-                            onServe={() => {}} 
-                            onAddFunds={() => {}} 
+                            onServe={handleServe} 
+                            onAddFunds={handleAddFunds} 
                             multiplier={activeBar.tapValueMultiplier}
                             isMinor={currentUserProfile?.isMinor}
                             theme={theme}
-                            isPeek={true}
+                            isPeek={false}
                           />
                         </div>
-                      );
-                    })()}
 
-                    {/* Main Drink */}
-                    <div style={{ flex: "0 0 calc(100% - 40px)", position: "relative", zIndex: 2 }}>
-                      <DrinkCard 
-                        drink={selectedDrink} 
-                        direction={direction} 
-                        barBalance={activeBar.balance} 
-                        onServe={handleServe} 
-                        onAddFunds={handleAddFunds} 
-                        multiplier={activeBar.tapValueMultiplier}
-                        isMinor={currentUserProfile?.isMinor}
-                        theme={theme}
-                        isPeek={true}
-                      />
-                    </div>
+                        {/* Peek Next Drink */}
+                        {activeBar.taps && activeBar.taps.length > 1 && (() => {
+                          const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                          const nextIndex = currentIndex === -1 ? 1 : (currentIndex + 1) % activeBar.taps.length;
+                          const nextDrink = activeBar.taps[nextIndex];
+                          return (
+                            <div 
+                              onClick={() => handleSelectTap(nextDrink.id)}
+                              style={{ 
+                                position: "absolute",
+                                left: "calc(100% - 15px)", 
+                                width: "calc(100% - 40px)", 
+                                filter: "grayscale(100%) brightness(0.9)",
+                                transform: "scale(0.9)",
+                                transformOrigin: "left center",
+                                cursor: "pointer",
+                                pointerEvents: "auto",
+                                zIndex: 1
+                              }}>
+                              <DrinkCard 
+                                drink={nextDrink} 
+                                direction={direction} 
+                                barBalance={activeBar.balance} 
+                                onServe={() => {}} 
+                                onAddFunds={() => {}} 
+                                multiplier={activeBar.tapValueMultiplier}
+                                isMinor={currentUserProfile?.isMinor}
+                                theme={theme}
+                                isPeek={true}
+                              />
+                            </div>
+                          );
+                        })()}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
 
-                    {/* Peek Next Drink */}
-                    {activeBar.taps && activeBar.taps.length > 1 && (() => {
-                      const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
-                      const nextIndex = currentIndex === -1 ? 1 : (currentIndex + 1) % activeBar.taps.length;
-                      const nextDrink = activeBar.taps[nextIndex];
-                      return (
-                        <div 
-                          onClick={() => handleSelectTap(nextDrink.id)}
-                          style={{ 
-                            position: "absolute",
-                            left: "calc(100% - 15px)", 
-                            width: "calc(100% - 40px)", 
-                            filter: "grayscale(100%) brightness(0.9)",
-                            transform: "scale(0.9)",
-                            transformOrigin: "left center",
-                            cursor: "pointer",
-                            pointerEvents: "auto",
-                            zIndex: 1
-                          }}>
-                          <DrinkCard 
-                            drink={nextDrink} 
-                            direction={direction} 
-                            barBalance={activeBar.balance} 
-                            onServe={() => {}} 
-                            onAddFunds={() => {}} 
-                            multiplier={activeBar.tapValueMultiplier}
-                            isMinor={currentUserProfile?.isMinor}
-                            theme={theme}
-                            isPeek={true}
-                          />
-                        </div>
-                      );
-                    })()}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <BalanceBox balance={activeBar.balance} onAddFunds={handleAddFunds} />
-            </motion.div>
+                  <BalanceBox
+                    balance={activeBar.balance}
+                    onAddFunds={handleAddFunds}
+                    onLoadFunds={() => setBarSubView('wallet')}
+                    onTransfer={() => setBarSubView('transfer')}
+                    onActivity={() => setBarSubView('activity')}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           ) : (
             // MAIN TAB PANELS
             <>
