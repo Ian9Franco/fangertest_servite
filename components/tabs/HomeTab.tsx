@@ -169,7 +169,7 @@ export default function HomeTab({
           onClick={() => setFilter('cercanos')}
           style={{ 
             display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'cercanos' ? "#1A1716" : "#E9ECEF", 
+            backgroundColor: filter === 'cercanos' ? "#28a745" : "#E9ECEF", 
             color: filter === 'cercanos' ? "#fff" : "#1A1716", 
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
@@ -183,7 +183,7 @@ export default function HomeTab({
           onClick={() => setFilter('favoritos')}
           style={{ 
             display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'favoritos' ? "#1A1716" : "#E9ECEF", 
+            backgroundColor: filter === 'favoritos' ? "#dc3545" : "#E9ECEF", 
             color: filter === 'favoritos' ? "#fff" : "#1A1716", 
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
@@ -197,7 +197,7 @@ export default function HomeTab({
           onClick={() => setFilter('saldo')}
           style={{ 
             display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'saldo' ? "#1A1716" : "#E9ECEF", 
+            backgroundColor: filter === 'saldo' ? "#007bff" : "#E9ECEF", 
             color: filter === 'saldo' ? "#fff" : "#1A1716", 
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
@@ -211,7 +211,7 @@ export default function HomeTab({
           onClick={() => setFilter('promociones')}
           style={{ 
             display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: filter === 'promociones' ? "#1A1716" : "#E9ECEF", 
+            backgroundColor: filter === 'promociones' ? "#6f42c1" : "#E9ECEF", 
             color: filter === 'promociones' ? "#fff" : "#1A1716", 
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}

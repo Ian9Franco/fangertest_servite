@@ -203,7 +203,7 @@ export default function SimpleWalletTab({
               transition: "border 0.15s ease"
             }}
           >
-            <img src="/assets/payments/mercado_pago.png" alt="Mercado Pago" style={{ height: "24px", objectFit: "contain" }} />
+            <img src="/assets/payments/mercado_pago.png" alt="Mercado Pago" style={{ height: "28px", objectFit: "contain" }} />
           </motion.button>
         </div>
       </div>

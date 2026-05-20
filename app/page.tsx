@@ -70,6 +70,13 @@ export default function Home() {
 
   // Beer pouring animation states
   const [isServing, setIsServing] = useState(false);
+  
+  // INSTRUCCIONES PARA USAR VIDEO EN VEZ DE ANIMACION:
+  // 1. Cambiá `useVideoForPouring` de false a true.
+  // 2. Colocá tu archivo de video en la carpeta public, ej: /public/assets/videos/pouring_beer.mp4
+  // 3. ¡Listo! El componente se encargará de mostrar el video mientras se sirve la cerveza.
+  const useVideoForPouring = false;
+
   const [servingDrinkName, setServingDrinkName] = useState("");
   const [servingQuantity, setServingQuantity] = useState(1);
   const [servingProgress, setServingProgress] = useState(0);
@@ -463,7 +470,21 @@ export default function Home() {
               textAlign: "center"
             }}
           >
-            {/* Inject self-contained premium css animations */}
+            {useVideoForPouring ? (
+              <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", width: "100%", marginBottom: "15px" }}>
+                {/* Contenedor del Video */}
+                <video 
+                  src="/assets/videos/pouring_beer.mp4" 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  style={{ width: "220px", height: "100%", borderRadius: "24px", objectFit: "cover", boxShadow: "0 20px 45px rgba(0,0,0,0.65)" }}
+                />
+              </div>
+            ) : (
+              <>
+                {/* Inject self-contained premium css animations */}
             <style>{`
               @keyframes rise-bubble {
                 0% {
@@ -611,6 +632,8 @@ export default function Home() {
                 </div>
               </motion.div>
             </div>
+            </>
+            )}
 
             {/* Pouring status messages */}
             <h2 style={{ fontSize: "20px", fontWeight: "900", fontFamily: "var(--font-family-title)", letterSpacing: "0.5px" }}>
