@@ -279,6 +279,7 @@ export default function HomeTab({
                     src={bar.logo}
                     alt={bar.name}
                     fill
+                    sizes="100px"
                     style={{
                       objectFit: bar.logo.toLowerCase().includes(".jpg") ? "cover" : "contain",
                       padding: bar.logo.toLowerCase().includes(".jpg") ? "0" : "5px"

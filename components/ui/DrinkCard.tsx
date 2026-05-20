@@ -187,7 +187,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
         <div style={{ display: "flex", gap: "15px" }}>
           {/* Glass Image */}
           <div style={{ position: "relative", width: "45px", height: "85px" }}>
-            <Image src={drink.img} alt={drink.name} fill style={{ objectFit: "contain" }} />
+            <Image src={drink.img} alt={drink.name} fill sizes="100px" style={{ objectFit: "contain" }} />
           </div>
 
           {/* Texts */}
@@ -208,7 +208,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
             backgroundColor: drink.logo ? "transparent" : ((theme === 'dark' ? "Blanco" : "Negro").toLowerCase().includes("negro") ? "#fff" : "#1A1716"),
             border: drink.logo ? "none" : ((theme === 'dark' ? "Blanco" : "Negro").toLowerCase().includes("negro") ? "1px solid var(--border-color)" : "1px solid #2A2625")
           }}>
-             <Image src={drink.logo || (theme === 'dark' ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png")} alt="Brand" fill style={{ objectFit: drink.logo ? "cover" : "contain", padding: drink.logo ? "0px" : "4px" }} />
+             <Image src={drink.logo || (theme === 'dark' ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png")} alt="Brand" fill sizes="100px" style={{ objectFit: drink.logo ? "cover" : "contain", padding: drink.logo ? "0px" : "4px" }} />
           </div>
           
           {/* Tech Stats List */}

@@ -13,6 +13,7 @@ import WalletTab from "@/components/tabs/WalletTab";
 import SimpleWalletTab from "@/components/tabs/SimpleWalletTab";
 import LocationTab from "@/components/tabs/LocationTab";
 import SimpleProfileTab from "@/components/tabs/SimpleProfileTab";
+import PromoModal from "@/components/ui/PromoModal";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
@@ -44,6 +45,7 @@ export default function Home() {
   const [filter, setFilter] = useState<'cercanos' | 'favoritos' | 'saldo' | 'promociones'>('cercanos');
   const [searchQuery, setSearchQuery] = useState("");
   const [useSimpleWallet, setUseSimpleWallet] = useState(true);
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
 
   // Dynamic user data and transaction states for real-time updates
   const [users, setUsers] = useState(usersData);
@@ -75,7 +77,7 @@ export default function Home() {
   // 1. Cambiá `useVideoForPouring` de false a true.
   // 2. Colocá tu archivo de video en la carpeta public, ej: /public/assets/videos/pouring_beer.mp4
   // 3. ¡Listo! El componente se encargará de mostrar el video mientras se sirve la cerveza.
-  const useVideoForPouring = false;
+  const useVideoForPouring = true;
 
   const [servingDrinkName, setServingDrinkName] = useState("");
   const [servingQuantity, setServingQuantity] = useState(1);
@@ -328,6 +330,7 @@ export default function Home() {
                 hasPromo={activeBar.hasPromo}
                 promoText={activeBar.promoText}
                 onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
+                onEditPromo={() => setIsPromoModalOpen(true)}
                 theme={theme}
               />
 
@@ -346,8 +349,23 @@ export default function Home() {
                     initial={{ opacity: 0, x: direction > 0 ? "100%" : "-100%" }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction < 0 ? "100%" : "-100%" }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    style={{ gridArea: "1 / 1", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}
+                    transition={{ type: "spring", stiffness: 220, damping: 28, mass: 0.8 }}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.5}
+                    onDragEnd={(e, { offset }) => {
+                      if (!activeBar.taps || activeBar.taps.length <= 1) return;
+                      if (offset.x < -40) {
+                        const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                        const nextIndex = (currentIndex + 1) % activeBar.taps.length;
+                        handleSelectTap(activeBar.taps[nextIndex].id);
+                      } else if (offset.x > 40) {
+                        const currentIndex = activeBar.taps.findIndex((d: any) => d.id === selectedDrink.id);
+                        const prevIndex = currentIndex <= 0 ? activeBar.taps.length - 1 : currentIndex - 1;
+                        handleSelectTap(activeBar.taps[prevIndex].id);
+                      }
+                    }}
+                    style={{ gridArea: "1 / 1", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", cursor: "grab" }}
                   >
                     {/* Peek Previous Drink */}
                     {activeBar.taps && activeBar.taps.length > 1 && (() => {
@@ -555,13 +573,15 @@ export default function Home() {
               <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "300px", width: "100%", marginBottom: "15px" }}>
                 {/* Contenedor del Video */}
                 <video
-                  src="/assets/videos/pouring_beer.mp4"
                   autoPlay
                   loop
                   muted
                   playsInline
-                  style={{ width: "220px", height: "100%", borderRadius: "24px", objectFit: "cover", boxShadow: "0 20px 45px rgba(0,0,0,0.65)" }}
-                />
+                  style={{ width: "220px", height: "100%", borderRadius: "24px", objectFit: "cover", boxShadow: "0 20px 45px rgba(0,0,0,0.65)", mixBlendMode: "screen" }}
+                >
+                  <source src="/assets/video_beer/01.mp4" type="video/mp4" />
+                  <source src="/assets/video_beer/01.mov" type="video/quicktime" />
+                </video>
               </div>
             ) : (
               <>
@@ -716,40 +736,46 @@ export default function Home() {
               </>
             )}
 
-            {/* Pouring status messages */}
-            <h2 style={{ fontSize: "20px", fontWeight: "900", fontFamily: "var(--font-family-title)", letterSpacing: "0.5px" }}>
-              {servingProgress < 100 ? (
-                <>Sirviendo canilla... 🍺</>
-              ) : (
-                <>¡Pinta Servida! 🎉</>
-              )}
-            </h2>
+            {!useVideoForPouring && (
+              <>
+                {/* Pouring status messages */}
+                <h2 style={{ fontSize: "20px", fontWeight: "900", fontFamily: "var(--font-family-title)", letterSpacing: "0.5px" }}>
+                  {servingProgress < 100 ? (
+                    <>Sirviendo canilla... 🍺</>
+                  ) : (
+                    <>¡Pinta Servida! 🎉</>
+                  )}
+                </h2>
 
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "8px", maxWidth: "250px", lineHeight: "1.5" }}>
-              {servingProgress < 100 ? (
-                <>Llenando {servingQuantity} pinta{servingQuantity > 1 ? "s" : ""} de <strong style={{ color: "#FFBF00" }}>{servingDrinkName}</strong>...</>
-              ) : (
-                <>Disfrutá tu pinta recién tirada. ¡Salud!</>
-              )}
-            </p>
+                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "8px", maxWidth: "250px", lineHeight: "1.5" }}>
+                  {servingProgress < 100 ? (
+                    <>Llenando {servingQuantity} pinta{servingQuantity > 1 ? "s" : ""} de <strong style={{ color: "#FFBF00" }}>{servingDrinkName}</strong>...</>
+                  ) : (
+                    <>Disfrutá tu pinta recién tirada. ¡Salud!</>
+                  )}
+                </p>
 
-            {/* Large glowing percentage / Check icon */}
-            <div style={{ marginTop: "20px", fontSize: "28px", fontWeight: "900", color: "#FFBF00" }}>
-              {servingProgress < 100 ? (
-                <>{servingProgress}%</>
-              ) : (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                >
-                  <CheckCircle2 size={48} color="#28a745" style={{ display: "inline" }} />
-                </motion.div>
-              )}
-            </div>
+                {/* Large glowing percentage / Check icon */}
+                <div style={{ marginTop: "20px", fontSize: "28px", fontWeight: "900", color: "#FFBF00" }}>
+                  {servingProgress < 100 ? (
+                    <>{servingProgress}%</>
+                  ) : (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    >
+                      <CheckCircle2 size={48} color="#28a745" style={{ display: "inline" }} />
+                    </motion.div>
+                  )}
+                </div>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
+
+      <PromoModal isOpen={isPromoModalOpen} onClose={() => setIsPromoModalOpen(false)} />
     </div>
   );
 }
