@@ -10,6 +10,8 @@
     "logo": "/assets/breweries/blest.png",
     "distance": "200m",
     "tapValueMultiplier": 1.0,
+    "hasPromo": true,
+    "promoText": "Todos los jueves 50% OFF en mesa de mujeres",
     "taps": [
       {
         "id": 101,
@@ -73,6 +75,8 @@
     "logo": "/assets/breweries/temple.png",
     "distance": "1.2km",
     "tapValueMultiplier": 1.1,
+    "hasPromo": false,
+    "promoText": "",
     "taps": [
       {
         "id": 201,
@@ -135,6 +139,8 @@
     "logo": "/assets/breweries/choperia_palermo.jpg",
     "distance": "800m",
     "tapValueMultiplier": 0.9,
+    "hasPromo": false,
+    "promoText": "",
     "taps": [
       {
         "id": 301,

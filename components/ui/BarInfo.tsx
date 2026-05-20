@@ -1,6 +1,6 @@
-import Image from "next/image";
-import { Heart, Percent } from "lucide-react";
+import { Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import PromoBadgeIcon from "./PromoBadgeIcon";
 
 interface BarInfoProps {
   name: string;
@@ -9,16 +9,34 @@ interface BarInfoProps {
   logo?: string;
   onToggleFavorite: (e: React.MouseEvent) => void;
   theme?: 'light' | 'dark';
+  hasPromo?: boolean;
+  promoText?: string;
+  onEditPromo?: () => void;
 }
 
 /**
  * BarInfo Component
  * Displays the bar logo, name, address, and an animated favorite (heart) icon.
+ *
+ * ─── PARA AGREGAR / EDITAR PROMOCIONES ───────────────────────────────────────
+ * Editá el archivo:  data/breweries.json
+ *   → "hasPromo": true          (activa el banner y el ícono amarillo)
+ *   → "promoText": "Tu texto"   (texto que aparece en el banner)
+ * ─────────────────────────────────────────────────────────────────────────────
  */
-export default function BarInfo({ name, address, isFavorite, logo, onToggleFavorite, theme = 'light' }: BarInfoProps) {
+export default function BarInfo({ 
+  name, 
+  address, 
+  isFavorite, 
+  logo, 
+  onToggleFavorite, 
+  theme = 'light',
+  hasPromo = false,
+  promoText = "",
+  onEditPromo
+}: BarInfoProps) {
   const displayLogo = logo || (theme === "dark" ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png");
   
-  // All icons get a black background unless they explicitly contain black text
   const isBlackText = displayLogo.toLowerCase().includes("negro");
   const bgColor = isBlackText ? "#fff" : "#1A1716";
 
@@ -60,11 +78,30 @@ export default function BarInfo({ name, address, isFavorite, logo, onToggleFavor
         
         {/* Action Icons */}
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+
+          {/* ── Botón Promo ─────────────────────────────────────────────────
+              Amarillo cuando hay promo activa, gris cuando no hay.
+              Al hacer click → abre el modal para editar la promo (onEditPromo).
+              ──────────────────────────────────────────────────────────────── */}
           <motion.div
             whileTap={{ scale: 0.8 }}
-            style={{ cursor: "pointer", display: "flex", padding: "6px", borderRadius: "50%", border: "1.5px solid var(--border-color)" }}
+            onClick={onEditPromo}
+            style={{ 
+              cursor: "pointer", 
+              display: "flex", 
+              padding: "5px", 
+              borderRadius: "50%", 
+              border: hasPromo ? "none" : "1.5px solid var(--border-color)",
+              backgroundColor: "transparent",
+            }}
+            title={hasPromo ? "Editar promoción" : "Agregar promoción"}
           >
-            <Percent size={18} color="var(--text-primary)" strokeWidth={2} />
+            <PromoBadgeIcon
+              size={22}
+              fillColor={hasPromo ? "#FFBF00" : "transparent"}
+              strokeColor={hasPromo ? "none" : "var(--border-color)"}
+              percentColor={hasPromo ? "#1A1716" : "var(--text-secondary)"}
+            />
           </motion.div>
 
           <motion.div
@@ -85,11 +122,30 @@ export default function BarInfo({ name, address, isFavorite, logo, onToggleFavor
         </div>
       </div>
 
-      {/* Promo Banner */}
-      <div style={{ backgroundColor: "#FFBF00", padding: "8px 12px", borderRadius: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Percent size={14} color="#1A1716" />
-        <span style={{ fontSize: "11px", fontWeight: "bold", color: "#1A1716" }}>Promo del día: Todos los jueves 50% OFF en mesa de mujeres</span>
-      </div>
+      {/* ── Promo Banner ──────────────────────────────────────────────────────
+          Se muestra automáticamente si hasPromo=true y promoText tiene texto.
+          Editá breweries.json para activarlo/desactivarlo por bar.
+          ──────────────────────────────────────────────────────────────────── */}
+      {hasPromo && promoText && (
+        <div style={{
+          backgroundColor: "#FFBF00",
+          padding: "10px 14px",
+          borderRadius: "10px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}>
+          <PromoBadgeIcon
+            size={20}
+            fillColor="transparent"
+            strokeColor="#1A1716"
+            percentColor="#1A1716"
+          />
+          <span style={{ fontSize: "12px", color: "#1A1716", lineHeight: 1.3 }}>
+            <strong>Promo del día:</strong> {promoText}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
     <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "100%" }}>
       {/* Balance Display */}
       <div className="balance-box" style={{ 
-        backgroundColor: "var(--bg-color)", 
+        backgroundColor: "#E9ECEF", 
         padding: "20px", 
         borderRadius: "15px", 
         textAlign: "center",
@@ -44,7 +44,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
             className="btn btn-yellow"
             style={{
               width: "100%",
-              padding: "16px",
+              padding: "12px",
               borderRadius: "30px", // Rounded
               border: "none",
               fontSize: "14px",
@@ -106,7 +106,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
             whileTap={{ scale: 0.98 }}
             style={{
               flex: 1,
-              padding: "14px",
+              padding: "10px",
               borderRadius: "30px", // Rounded
               border: "none",
               fontSize: "13px",
@@ -129,7 +129,7 @@ export default function BalanceBox({ balance, onAddFunds }: BalanceBoxProps) {
             whileTap={{ scale: 0.98 }}
             style={{
               flex: 1,
-              padding: "14px",
+              padding: "10px",
               borderRadius: "30px", // Rounded
               border: "none",
               fontSize: "13px",

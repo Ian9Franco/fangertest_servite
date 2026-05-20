@@ -10,6 +10,7 @@ import SkeletonLoader from "@/components/ui/SkeletonLoader";
 import LoginView from "@/components/auth/LoginView";
 import HomeTab from "@/components/tabs/HomeTab";
 import WalletTab from "@/components/tabs/WalletTab";
+import SimpleWalletTab from "@/components/tabs/SimpleWalletTab";
 import LocationTab from "@/components/tabs/LocationTab";
 import ProfileTab from "@/components/tabs/ProfileTab";
 
@@ -34,14 +35,15 @@ export default function Home() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncingType, setSyncingType] = useState<'login' | 'logout'>('login');
 
-  const [tab, setTab] = useState<'home' | 'wallet' | 'location' | 'profile'>('home');
+  const [tab, setTab] = useState<'home' | 'wallet' | 'promotions' | 'profile'>('home');
   const [selectedBarId, setSelectedBarId] = useState<number | null>(null);
   
   const [selectedTap, setSelectedTap] = useState(2);
   const [direction, setDirection] = useState(1);
   const [bars, setBars] = useState(initialBarsData);
-  const [filter, setFilter] = useState<'cercanos' | 'favoritos' | 'saldo'>('cercanos');
+  const [filter, setFilter] = useState<'cercanos' | 'favoritos' | 'saldo' | 'promociones'>('cercanos');
   const [searchQuery, setSearchQuery] = useState("");
+  const [useSimpleWallet, setUseSimpleWallet] = useState(true);
 
   // Dynamic user data and transaction states for real-time updates
   const [users, setUsers] = useState(usersData);
@@ -269,6 +271,7 @@ export default function Home() {
     
     if (filter === 'favoritos') return bar.isFavorite;
     if (filter === 'saldo') return bar.balance > 0;
+    if (filter === 'promociones') return bar.hasPromo;
     return true; // Default cercanos
   });
 
@@ -315,6 +318,8 @@ export default function Home() {
                 address={activeBar.address} 
                 isFavorite={activeBar.isFavorite}
                 logo={activeBar.logo}
+                hasPromo={activeBar.hasPromo}
+                promoText={activeBar.promoText}
                 onToggleFavorite={(e) => toggleFavorite(activeBar.id, e)}
                 theme={theme}
               />
@@ -347,44 +352,59 @@ export default function Home() {
           ) : (
             // MAIN TAB PANELS
             <>
-              {tab === 'home' && (
+              {(tab === 'home' || tab === 'promotions') && (
                 <HomeTab 
                   currentUser={currentUser}
                   users={users}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
-                  filter={filter}
-                  setFilter={setFilter}
+                  filter={tab === 'promotions' ? 'promociones' : filter}
+                  setFilter={(f) => {
+                    setFilter(f);
+                    if (f === 'promociones') setTab('promotions');
+                    else if (tab === 'promotions') setTab('home');
+                  }}
                   filteredBars={filteredBars}
                   onBarClick={handleBarClick}
                   onToggleFavorite={toggleFavorite}
                   pageVariants={pageVariants}
                   staggerContainer={staggerContainer}
                   listItemVariants={listItemVariants}
-                  setTab={setTab}
+                  setTab={setTab as any}
                 />
               )}
 
               {tab === 'wallet' && (
-                <WalletTab 
-                  currentUser={currentUser}
-                  users={users}
-                  bars={bars}
-                  transactions={transactions}
-                  handleAddFunds={handleAddFunds}
-                  pageVariants={pageVariants}
-                  paymentMethods={paymentMethods}
-                  setPaymentMethods={setPaymentMethods}
-                />
+                useSimpleWallet ? (
+                  <SimpleWalletTab 
+                    currentUser={currentUser}
+                    users={users}
+                    handleAddFunds={handleAddFunds}
+                    pageVariants={pageVariants}
+                    setTab={setTab as any}
+                  />
+                ) : (
+                  <WalletTab 
+                    currentUser={currentUser}
+                    users={users}
+                    bars={bars}
+                    transactions={transactions}
+                    handleAddFunds={handleAddFunds}
+                    pageVariants={pageVariants}
+                    paymentMethods={paymentMethods}
+                    setPaymentMethods={setPaymentMethods}
+                  />
+                )
               )}
 
-              {tab === 'location' && (
+              {/* location tab was removed from BottomNav, so this is no longer rendered through bottom nav but kept if needed */}
+              {tab === 'location' as any && (
                 <LocationTab 
                   currentUser={currentUser}
                   bars={bars}
                   setBars={setBars}
                   setSelectedBarId={setSelectedBarId}
-                  setTab={setTab}
+                  setTab={setTab as any}
                   pageVariants={pageVariants}
                 />
               )}
@@ -403,13 +423,20 @@ export default function Home() {
         </AnimatePresence>
       </main>
 
-      {/* <BottomNav 
-        activeTab={tab} 
+      {/* 
+      <BottomNav 
+        activeTab={tab as 'home' | 'wallet' | 'promotions' | 'profile'} 
         setActiveTab={(newTab) => {
           setSelectedBarId(null);
           setTab(newTab);
+          if (newTab === 'promotions') {
+            setFilter('promociones');
+          } else if (newTab === 'home' && filter === 'promociones') {
+            setFilter('cercanos');
+          }
         }} 
-      /> */}
+      /> 
+      */}
 
       {/* Dynamic Beer Pouring Screen Overlay */}
       <AnimatePresence>

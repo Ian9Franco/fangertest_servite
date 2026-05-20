@@ -27,7 +27,7 @@ export default function LocationTab({
   pageVariants
 }: LocationTabProps) {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const isAdmin = currentUser === "sofia";
+  const isAdmin = false; // Sofia is now a normal user without admin rights
 
   // Form states for adding a new brewery
   const [newName, setNewName] = useState("");

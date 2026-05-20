@@ -29,6 +29,14 @@ export interface Bar {
   lng: number;
   tapValueMultiplier: number;
   taps: Drink[]; // Nested dynamic taps list!
+
+  // ─── PROMOCIONES ──────────────────────────────────────────────────────────
+  // Para activar una promo en un bar, editá breweries.json:
+  //   "hasPromo": true,
+  //   "promoText": "Tu texto de promo acá"
+  // ─────────────────────────────────────────────────────────────────────────
+  hasPromo?: boolean;  // true = muestra el banner y el ícono amarillo
+  promoText?: string;  // Texto visible en el banner (ej: "50% OFF los jueves")
 }
 
 export const drinksData: Drink[] = [

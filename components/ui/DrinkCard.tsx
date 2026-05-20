@@ -63,7 +63,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
         animate="center"
         exit="exit"
         style={{ 
-          backgroundColor: "var(--app-bg)", 
+          backgroundColor: "#E9ECEF", 
           padding: "18px", 
           borderRadius: "18px", 
           display: "flex", 
@@ -168,7 +168,7 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
         : { x: { type: "spring", stiffness: 350, damping: 28 }, opacity: { duration: 0.2 } }
       }
       style={{ 
-        backgroundColor: "var(--app-bg)", 
+        backgroundColor: "#E9ECEF", 
         padding: "18px", 
         borderRadius: "18px", 
         display: "flex", 
@@ -204,10 +204,10 @@ export default function DrinkCard({ drink, direction = 1, barBalance, onServe, o
           <div style={{ 
             width: "32px", height: "32px", borderRadius: "50%", overflow: "hidden", position: "relative", 
             display: "flex", justifyContent: "center", alignItems: "center", 
-            backgroundColor: (drink.logo || (theme === 'dark' ? "Blanco" : "Negro")).toLowerCase().includes("negro") ? "#fff" : "#1A1716",
-            border: (drink.logo || (theme === 'dark' ? "Blanco" : "Negro")).toLowerCase().includes("negro") ? "1px solid var(--border-color)" : "1px solid #2A2625"
+            backgroundColor: drink.logo ? "transparent" : ((theme === 'dark' ? "Blanco" : "Negro").toLowerCase().includes("negro") ? "#fff" : "#1A1716"),
+            border: drink.logo ? "none" : ((theme === 'dark' ? "Blanco" : "Negro").toLowerCase().includes("negro") ? "1px solid var(--border-color)" : "1px solid #2A2625")
           }}>
-             <Image src={drink.logo || (theme === 'dark' ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png")} alt="Brand" fill style={{ objectFit: "contain", padding: drink.logo ? "0px" : "4px" }} />
+             <Image src={drink.logo || (theme === 'dark' ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png")} alt="Brand" fill style={{ objectFit: drink.logo ? "cover" : "contain", padding: drink.logo ? "0px" : "4px" }} />
           </div>
           
           {/* Tech Stats List */}

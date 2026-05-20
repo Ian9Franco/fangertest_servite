@@ -84,6 +84,7 @@ export default function ProfileTab({
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "12px" }}>
           <h2 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, fontFamily: "var(--font-family-title)" }}>{user.name}</h2>
+          {/* Admin badge commented out:
           {user.name === "Sofia" && (
             <span style={{ 
               fontSize: "8px", 
@@ -98,6 +99,7 @@ export default function ProfileTab({
               Admin
             </span>
           )}
+          */}
         </div>
         <span style={{ fontSize: "11px", color: "var(--text-secondary)", marginTop: "2px", fontWeight: "bold" }}>{user.rank}</span>
       </div>

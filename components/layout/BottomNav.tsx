@@ -1,9 +1,9 @@
-import { Home as HomeIcon, Wallet, MapPin, User } from "lucide-react";
+import { Home as HomeIcon, Wallet, MapPin, User, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface BottomNavProps {
-  activeTab: 'home' | 'wallet' | 'location' | 'profile';
-  setActiveTab: (tab: 'home' | 'wallet' | 'location' | 'profile') => void;
+  activeTab: 'home' | 'wallet' | 'promotions' | 'profile';
+  setActiveTab: (tab: 'home' | 'wallet' | 'promotions' | 'profile') => void;
 }
 
 /**
@@ -12,10 +12,10 @@ interface BottomNavProps {
  */
 export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
   const tabs = [
-    { id: 'home', icon: HomeIcon, label: 'Inicio' },
-    { id: 'wallet', icon: Wallet, label: 'Billetera' },
-    { id: 'location', icon: MapPin, label: 'Mapa' },
-    { id: 'profile', icon: User, label: 'Perfil' },
+    { id: 'home', icon: HomeIcon, label: 'Inicio', color: 'green', bg: 'rgba(0, 128, 0, 0.08)' },
+    { id: 'wallet', icon: Wallet, label: 'Billetera', color: 'red', bg: 'rgba(255, 0, 0, 0.08)' },
+    { id: 'promotions', icon: Tag, label: 'Promociones', color: 'blue', bg: 'rgba(0, 0, 255, 0.08)' },
+    { id: 'profile', icon: User, label: 'Perfil', color: 'purple', bg: 'rgba(128, 0, 128, 0.08)' },
   ] as const;
 
   return (
@@ -47,7 +47,6 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
                 userSelect: "none"
               }}
             >
-              {/* Sliding background pill for the active tab */}
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
@@ -58,7 +57,7 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: "rgba(255, 102, 0, 0.08)", // Light orange tint
+                    backgroundColor: tab.bg,
                     borderRadius: "16px",
                     zIndex: 0
                   }}
@@ -67,7 +66,7 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
               
               <Icon 
                 size={22} 
-                color={isActive ? "#FF6600" : "#6c757d"} 
+                color={isActive ? tab.color : "#6c757d"} 
                 style={{ 
                   transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
                   transform: isActive ? "scale(1.12) translateY(-1px)" : "scale(1)",
@@ -77,7 +76,7 @@ export default function BottomNav({ activeTab, setActiveTab }: BottomNavProps) {
               <span style={{ 
                 fontSize: "10px", 
                 fontWeight: "bold", 
-                color: isActive ? "#FF6600" : "#6c757d",
+                color: isActive ? tab.color : "#6c757d",
                 fontFamily: "var(--font-family-body)",
                 zIndex: 1,
                 letterSpacing: "0.2px"

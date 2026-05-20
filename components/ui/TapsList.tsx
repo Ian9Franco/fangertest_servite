@@ -87,7 +87,7 @@ export default function TapsList({ drinks, selectedTap, onSelectTap, theme = 'li
               }
             }}
             style={{
-              backgroundColor: selectedTap === drink.id ? "var(--app-bg)" : "var(--bg-color)",
+              backgroundColor: selectedTap === drink.id ? "var(--app-bg)" : "#E9ECEF",
               border: selectedTap === drink.id ? "2px solid #FFBF00" : "2px solid transparent",
               boxShadow: "none",
               opacity: selectedTap === drink.id ? 1 : 0.5,
@@ -96,7 +96,7 @@ export default function TapsList({ drinks, selectedTap, onSelectTap, theme = 'li
           >
             {/* Servite Logo Icon - Increased size to 48 */}
             <Image 
-              src={theme === "dark" ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png"} 
+              src={selectedTap === drink.id ? (theme === "dark" ? "/assets/brand/Isotipo_Blanco.png" : "/assets/brand/Isotipo_Negro.png") : "/assets/brand/Isotipo_Blanco.png"} 
               alt="Logo" 
               width={48} 
               height={48}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Heart, Wallet, MoreVertical, Tag, User, Map as MapIcon } from "lucide-react";
 import Image from "next/image";
+import PromoBadgeIcon from "../ui/PromoBadgeIcon";
 
 interface Bar {
   id: number;
@@ -11,6 +12,8 @@ interface Bar {
   isFavorite: boolean;
   balance: number;
   distance: string;
+  hasPromo?: boolean;  // ← configurar en data/breweries.json
+  promoText?: string;  // ← configurar en data/breweries.json
 }
 
 interface HomeTabProps {
@@ -18,8 +21,8 @@ interface HomeTabProps {
   users: any;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  filter: 'cercanos' | 'favoritos' | 'saldo';
-  setFilter: (filter: 'cercanos' | 'favoritos' | 'saldo') => void;
+  filter: 'cercanos' | 'favoritos' | 'saldo' | 'promociones';
+  setFilter: (filter: 'cercanos' | 'favoritos' | 'saldo' | 'promociones') => void;
   filteredBars: Bar[];
   onBarClick: (id: number) => void;
   onToggleFavorite: (id: number, e: React.MouseEvent) => void;
@@ -205,14 +208,15 @@ export default function HomeTab({
         {/* Promociones */}
         <motion.button 
           whileTap={{ scale: 0.95 }}
+          onClick={() => setFilter('promociones')}
           style={{ 
             display: "flex", alignItems: "center", gap: "4px", 
-            backgroundColor: "#E9ECEF", 
-            color: "#1A1716", 
+            backgroundColor: filter === 'promociones' ? "#1A1716" : "#E9ECEF", 
+            color: filter === 'promociones' ? "#fff" : "#1A1716", 
             padding: "6px 10px", borderRadius: "16px", fontWeight: "bold", fontSize: "10.5px", flexShrink: 0, border: "none", cursor: "pointer"
           }}
         >
-          <Tag size={12} /> Promociones
+          <Tag size={12} fill={filter === 'promociones' ? "#fff" : "none"} /> Promociones
         </motion.button>
       </div>
 
@@ -294,6 +298,14 @@ export default function HomeTab({
                     <MapPin size={11} /> {bar.distance}
                   </div>
                 </div>
+
+                {/* Indicador de promo activa — viene de breweries.json */}
+                {bar.hasPromo && (
+                  <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "4px" }}>
+                    <PromoBadgeIcon size={11} fillColor="#FFBF00" strokeColor="none" percentColor="#1A1716" />
+                    <span style={{ fontSize: "10px", color: "#9B7400", fontWeight: "700", letterSpacing: "0.2px" }}>Promo activa</span>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))
